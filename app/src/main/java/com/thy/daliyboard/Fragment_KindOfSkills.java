@@ -15,7 +15,7 @@ import android.view.ViewGroup;
 
 public class Fragment_KindOfSkills extends Fragment {
 
-    FloatingActionButton actionButton;
+    com.melnykov.fab.FloatingActionButton actionButton;
 
     @Nullable
     @Override
