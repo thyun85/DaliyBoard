@@ -3,7 +3,6 @@ package com.thy.daliyboard;
 import android.app.AlertDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +12,7 @@ import android.view.ViewGroup;
  * Created by alofo on 2018-03-21.
  */
 
-public class Fragment_KindOfSkills extends Fragment {
+public class Fragment_Review extends Fragment {
 
     com.melnykov.fab.FloatingActionButton actionButton;
 
@@ -21,7 +20,7 @@ public class Fragment_KindOfSkills extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.kindof_2, container, false);
+        View view = inflater.inflate(R.layout.review, container, false);
 
         actionButton = view.findViewById(R.id.fab);
 

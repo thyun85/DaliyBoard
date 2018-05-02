@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="8dp">
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/layout_swipe"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ScrollView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="8dp">
+
+                <ImageView
+                    android:id="@+id/iv_weather"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="20dp"
+                    android:src="@drawable/sunny" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginTop="10dp"
+                    android:background="#aaaaaa" />
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center">
+
+                    <TextView
+                        android:id="@+id/tv_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="10dp"
+                        android:text="OO구"/>
+
+                    <ImageView
+                        android:id="@+id/iv_search"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_search"
+                        android:layout_marginLeft="180dp"
+                        android:layout_marginTop="10dp"
+                        android:clickable="true"/>
+
+                    <TextView
+                        android:id="@+id/tv_date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/tv_name"
+                        android:layout_centerHorizontal="true"
+                        android:text="2018-05-01 15:00 기준" />
+
+                    <ImageView
+                        android:id="@+id/iv_dustimage"
+                        android:layout_width="160dp"
+                        android:layout_height="160dp"
+                        android:layout_below="@id/tv_date"
+                        android:layout_marginRight="30dp"
+                        android:layout_marginTop="24dp"
+                        android:src="@drawable/smile" />
+
+                    <TextView
+                        android:id="@+id/tv_pm10"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="30dp"
+                        android:layout_marginTop="100dp"
+                        android:layout_toRightOf="@id/iv_dustimage"
+                        android:text="미세먼지"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/tv_pm10info"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/tv_pm10"
+                        android:layout_marginRight="30dp"
+                        android:layout_toRightOf="@id/iv_dustimage"
+                        android:text="------" />
+
+                    <TextView
+                        android:id="@+id/tv_pm25"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/tv_pm10info"
+                        android:layout_marginRight="30dp"
+                        android:layout_toRightOf="@id/iv_dustimage"
+                        android:text="초미세먼지"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/tv_pm25info"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/tv_pm25"
+                        android:layout_marginRight="30dp"
+                        android:layout_toRightOf="@id/iv_dustimage"
+                        android:text="------" />
+
+                    <TextView
+                        android:id="@+id/tv_grade"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/tv_pm25info"
+                        android:layout_toRightOf="@id/iv_dustimage"
+                        android:layout_marginRight="40dp"
+                        android:text="보통"
+                        android:textSize="24sp" />
+
+                    <TextView
+                        android:id="@+id/tv_alarm"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/iv_dustimage"
+                        android:layout_centerHorizontal="true"
+                        android:maxLines="2"
+                        android:text="---" />
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+        </ScrollView>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+</RelativeLayout>

@@ -7,14 +7,13 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 
 public class MainActivity extends AppCompatActivity {
 
     TabLayout tabLayout;
 
     ViewPager pager;
-    MainAdapter adapter;
+    Adapter_Main adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
 
         tabLayout = findViewById(R.id.layout_tab);
         pager = findViewById(R.id.pager);
-        adapter = new MainAdapter(getSupportFragmentManager());
+        adapter = new Adapter_Main(getSupportFragmentManager());
         pager.setAdapter(adapter);
 
         tabLayout.setupWithViewPager(pager);

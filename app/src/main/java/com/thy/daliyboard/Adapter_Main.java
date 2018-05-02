@@ -8,11 +8,11 @@ import android.support.v4.app.FragmentPagerAdapter;
  * Created by alofo on 2018-03-21.
  */
 
-public class MainAdapter extends FragmentPagerAdapter {
+public class Adapter_Main extends FragmentPagerAdapter {
 
-    String[] titles = {"Boards", "Skills", "스팟", "Show us"};
+    String[] titles = {"날씨", "팁", "리뷰", "장소", "My"};
 
-    public MainAdapter(FragmentManager fm) {
+    public Adapter_Main(FragmentManager fm) {
         super(fm);
     }
 
@@ -23,19 +23,23 @@ public class MainAdapter extends FragmentPagerAdapter {
 
         switch (position){
             case 0:
-                fragment = new Fragment_KindOfBoards();
+                fragment = new Fragment_Weather();
                 break;
 
             case 1:
-                fragment = new Fragment_KindOfSkills();
+                fragment = new Fragment_Tips();
                 break;
 
             case 2:
-                fragment = new Fragment_Spot();
+                fragment = new Fragment_Review();
                 break;
 
             case 3:
-                fragment = new Fragment_Howto();
+                fragment = new Fragment_Spot();;
+                break;
+
+            case 4:
+                fragment = new Fragment_MyPage();
                 break;
         }
 
@@ -44,7 +48,7 @@ public class MainAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return 4;
+        return titles.length;
     }
 
     @Override

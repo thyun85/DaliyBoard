@@ -28,14 +28,14 @@ public class IntroActivity extends AppCompatActivity {
         logo.startAnimation(ani);
 
         //스케쥴관리 객체에게 스케쥴 등록
-        timer.schedule(task, 4000);
+        timer.schedule(task, 3000);
 
     }
 
     TimerTask task = new TimerTask() {
         @Override
         public void run() {
-            //스케쥴링에 의해 4초 후에 이 메소드 실행
+            //스케쥴링에 의해 3초 후에 이 메소드 실행
             Intent intent = new Intent(IntroActivity.this, MainActivity.class);
             startActivity(intent);
             finish();
