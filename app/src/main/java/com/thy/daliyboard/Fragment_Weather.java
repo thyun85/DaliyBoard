@@ -44,9 +44,12 @@ public class Fragment_Weather extends Fragment {
     XMLParserTaskAlarm taskAlarm;
 
     TextView tvName, tvDate, tvPm10, tvPm25, tvGrade, dustAlarm;
-    ImageView ivSearch;
+    ImageView ivSearch, ivGrade;
+    String[] listItem;
 
     DustInfo dustInfo = null;
+
+    String basic=null;
 
     @Nullable
     @Override
@@ -60,7 +63,6 @@ public class Fragment_Weather extends Fragment {
         tvPm25 = view.findViewById(R.id.tv_pm25info);
         tvGrade = view.findViewById(R.id.tv_grade);
 
-
         XMLParsing();
 
         refreshLayout = view.findViewById(R.id.layout_swipe);
@@ -73,7 +75,65 @@ public class Fragment_Weather extends Fragment {
             }
         });
 
+        ivSearch = view.findViewById(R.id.iv_search);
+        ivSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                clickSearch();
+            }
+        });
+
+        ivGrade = view.findViewById(R.id.iv_grade);
+
         return view;
+    }
+
+    public void clickSearch(){
+
+        listItem = new String[]{"강남구", "강동구", "강북구", "강서구", "관악구", "광진구", "구로구", "금천구",
+                                "노원구", "도봉구", "동대문구", "동작구", "마포구", "서대문구", "서초구",
+                                "성동구", "성북구", "송파구", "양천구", "영등포구", "용산구", "은평구",
+                                "종로구", "중구", "중랑구"};
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
+        alertDialog.setTitle("지역을 선택하세요");
+
+        alertDialog.setSingleChoiceItems(listItem, -1, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+//                tvName.setText(listItem[i]);
+                dialogInterface.dismiss();
+
+                search(listItem[i]);
+
+//                basic = listItem[i];
+//                Toast.makeText(getActivity(), basic, Toast.LENGTH_SHORT).show();
+            }
+        });
+        alertDialog.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        });
+
+        alertDialog.create().show();
+
+//        XMLParsing();
+    }
+
+    void search(String city){
+        for(int i=0; i<dustInfos.size(); i++){
+            if(dustInfos.get(i).getMsrstename().equals(city)){
+                tvName.setText(dustInfos.get(i).getMsrstename());
+                tvDate.setText(dustInfos.get(i).getMsrdate());
+                tvPm10.setText(dustInfos.get(i).getPm10());
+                tvPm25.setText(dustInfos.get(i).getPm25());
+                tvGrade.setText(dustInfos.get(i).getGrade());
+                if(dustInfos.get(i).getGrade().equals("보통")) ivGrade.setImageResource(R.drawable.smile);
+                if(dustInfos.get(i).getGrade().equals("나쁨")) ivGrade.setImageResource(R.drawable.sad);
+                if(dustInfos.get(i).getGrade().equals("점검중")) ivGrade.setImageResource(R.drawable.setting);
+            }
+        }
     }
 
     void XMLParsing(){
@@ -154,7 +214,10 @@ public class Fragment_Weather extends Fragment {
                             tagName = xpp.getName();
 
                             if (tagName.equals("row")) {
-                                dustInfos.add(dustInfo);
+                                if(dustInfo.getMsrstename() !=null){
+                                    dustInfos.add(dustInfo);
+                                }
+//                                dustInfos.add(dustInfo);
 
 //                                Logcat에 기록 남기기...(디버깅 작업시 용이)
                                 Log.i("AAAA", "success");

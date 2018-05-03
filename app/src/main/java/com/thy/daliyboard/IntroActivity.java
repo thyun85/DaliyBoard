@@ -36,7 +36,9 @@ public class IntroActivity extends AppCompatActivity {
         @Override
         public void run() {
             //스케쥴링에 의해 3초 후에 이 메소드 실행
-            Intent intent = new Intent(IntroActivity.this, MainActivity.class);
+//            Intent intent = new Intent(IntroActivity.this, MainActivity.class);
+
+            Intent intent = new Intent(IntroActivity.this, LoginActivity.class);
             startActivity(intent);
             finish();
         }

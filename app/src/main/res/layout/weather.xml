@@ -69,7 +69,7 @@
                         android:text="2018-05-01 15:00 기준" />
 
                     <ImageView
-                        android:id="@+id/iv_dustimage"
+                        android:id="@+id/iv_grade"
                         android:layout_width="160dp"
                         android:layout_height="160dp"
                         android:layout_below="@id/tv_date"
@@ -83,7 +83,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginRight="30dp"
                         android:layout_marginTop="100dp"
-                        android:layout_toRightOf="@id/iv_dustimage"
+                        android:layout_toRightOf="@id/iv_grade"
                         android:text="미세먼지"
                         android:textSize="12sp" />
 
@@ -93,7 +93,7 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@id/tv_pm10"
                         android:layout_marginRight="30dp"
-                        android:layout_toRightOf="@id/iv_dustimage"
+                        android:layout_toRightOf="@id/iv_grade"
                         android:text="------" />
 
                     <TextView
@@ -102,7 +102,7 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@id/tv_pm10info"
                         android:layout_marginRight="30dp"
-                        android:layout_toRightOf="@id/iv_dustimage"
+                        android:layout_toRightOf="@id/iv_grade"
                         android:text="초미세먼지"
                         android:textSize="12sp" />
 
@@ -112,7 +112,7 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@id/tv_pm25"
                         android:layout_marginRight="30dp"
-                        android:layout_toRightOf="@id/iv_dustimage"
+                        android:layout_toRightOf="@id/iv_grade"
                         android:text="------" />
 
                     <TextView
@@ -120,7 +120,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/tv_pm25info"
-                        android:layout_toRightOf="@id/iv_dustimage"
+                        android:layout_toRightOf="@id/iv_grade"
                         android:layout_marginRight="40dp"
                         android:text="보통"
                         android:textSize="24sp" />
@@ -129,7 +129,7 @@
                         android:id="@+id/tv_alarm"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/iv_dustimage"
+                        android:layout_below="@id/iv_grade"
                         android:layout_centerHorizontal="true"
                         android:maxLines="2"
                         android:text="---" />
