@@ -2,14 +2,21 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:padding="16dp">
+    android:id="@+id/tablb">
 
-    <TextView
-        android:id="@+id/tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="보드타기 좋은 스팟"/>
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/layout_swipe"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_lb"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingBottom="4dp">
+        </android.support.v7.widget.RecyclerView>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
 
     <com.melnykov.fab.FloatingActionButton
         android:id="@+id/fab"
@@ -21,6 +28,8 @@
         android:layout_marginBottom="24dp"
         android:src="@drawable/ic_add"
         android:background="#5b4747"
-        app:fab_type="mini"/>
+        android:backgroundTint="#c6dbf9"
+        fabSize="mini"
+        fab_type="mini"/>
 
 </RelativeLayout>

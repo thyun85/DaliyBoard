@@ -2,9 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:padding="4dp"
-    android:background="#cccccc">
+    android:id="@+id/tabsk8">
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/layout_swipe"
@@ -12,7 +10,7 @@
         android:layout_height="match_parent">
 
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/recycler_tips"
+            android:id="@+id/recycler_sk8"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:paddingBottom="4dp">
@@ -30,8 +28,8 @@
         android:layout_marginBottom="24dp"
         android:src="@drawable/ic_add"
         android:background="#5b4747"
-        app:backgroundTint="#c6dbf9"
-        app:fabSize="auto"
-        app:fab_type="mini"/>
+        android:backgroundTint="#c6dbf9"
+        fabSize="mini"
+        fab_type="mini"/>
 
 </RelativeLayout>

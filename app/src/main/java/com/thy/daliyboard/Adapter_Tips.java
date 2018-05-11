@@ -1,12 +1,15 @@
 package com.thy.daliyboard;
 
 import android.content.Context;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.MediaController;
 import android.widget.TextView;
+import android.widget.VideoView;
 
 import com.bumptech.glide.Glide;
 
@@ -17,11 +20,17 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class Adapter_Tips extends RecyclerView.Adapter {
 
     Context context;
-    ArrayList<Feed> feeds;
+//    ArrayList<Feed> feeds;
+    ArrayList<TipsItem> tipsItems;
 
-    public Adapter_Tips(Context context, ArrayList<Feed> feeds) {
+//    public Adapter_Tips(Context context, ArrayList<Feed> feeds) {
+//        this.context = context;
+//        this.feeds = feeds;
+//    }
+
+    public Adapter_Tips(Context context, ArrayList<TipsItem> tipsItems) {
         this.context = context;
-        this.feeds = feeds;
+        this.tipsItems = tipsItems;
     }
 
     @Override
@@ -40,36 +49,58 @@ public class Adapter_Tips extends RecyclerView.Adapter {
 
         VH vh = (VH)holder;
 
-        Feed feed = feeds.get(position);
+//        Feed feed = feeds.get(position);
+//
+//        vh.tvTitle.setText(feed.title);
+//        vh.tvMessage.setText(feed.message);
+//        vh.tvTimes.setText(feed.times);
+//
+//        Glide.with(context).load(feed.icon).into(vh.ivIcon);
+//        Glide.with(context).load(feed.getImageURL()).into(vh.imageView);
 
-        vh.tvTitle.setText(feed.title);
-        vh.tvMessage.setText(feed.message);
-        vh.tvTimes.setText(feed.times);
+        TipsItem tipsItem = tipsItems.get(position);
 
-        Glide.with(context).load(feed.icon).into(vh.ivIcon);
-        Glide.with(context).load(feed.getImageURL()).into(vh.imageView);
+        vh.tvTitle.setText(tipsItem.nickName);
+        vh.tvMessage.setText(tipsItem.msg);
+        vh.tvTimes.setText(tipsItem.upDate);
+
+//        Glide.with(context).load(tipsItem.getAviPath()).into(vh.imageView);
+
+        MediaController mediaController = new MediaController(context);
+        mediaController.setAnchorView(vh.videoView);
+        Uri video = Uri.parse(tipsItem.aviPath);
+        vh.videoView.setMediaController(mediaController);
+        vh.videoView.setVideoURI(video);
+        vh.videoView.requestFocus();
+        vh.videoView.start();
 
     }
 
     @Override
+//    public int getItemCount() {
+//        return feeds.size();
+//    }
+
     public int getItemCount() {
-        return feeds.size();
+        return tipsItems.size();
     }
 
     class VH extends RecyclerView.ViewHolder{
 
         CircleImageView ivIcon;
         TextView tvTitle, tvMessage, tvTimes;
-        ImageView imageView;
+//        ImageView imageView;
+        VideoView videoView;
 
         public VH(View itemView) {
             super(itemView);
 
-            ivIcon = itemView.findViewById(R.id.iv_icon);
+//            ivIcon = itemView.findViewById(R.id.iv_icon);
             tvTitle = itemView.findViewById(R.id.tv_title);
             tvMessage = itemView.findViewById(R.id.tv_message);
             tvTimes = itemView.findViewById(R.id.tv_times);
-            imageView = itemView.findViewById(R.id.iv_image);
+//            imageView = itemView.findViewById(R.id.iv_image);
+            videoView = itemView.findViewById(R.id.videoview);
         }
     }
 }
