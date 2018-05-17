@@ -35,7 +35,8 @@
         <activity android:name=".PostActivity" />
         <activity android:name=".PostReviewLbActivity" />
         <activity android:name=".PostReviewSk8Activity" />
-        <activity android:name=".PostReviewEtcActivity"></activity>
+        <activity android:name=".PostReviewEtcActivity" />
+        <activity android:name=".PostSpotActivity"></activity>
     </application>
 
 </manifest>

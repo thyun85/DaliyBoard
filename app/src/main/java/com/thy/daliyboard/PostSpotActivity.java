@@ -26,7 +26,7 @@ import com.android.volley.request.SimpleMultiPartRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 
-public class PostReviewLbActivity extends AppCompatActivity {
+public class PostSpotActivity extends AppCompatActivity {
 
     ImageView iv;
     TextView tvName;
@@ -36,9 +36,7 @@ public class PostReviewLbActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_post_review_lb);
-
-//        getSupportActionBar().setSubtitle("LB");
+        setContentView(R.layout.activity_post_spot);
 
         iv = findViewById(R.id.iv);
         tvName = findViewById(R.id.tv_getname);
@@ -114,7 +112,7 @@ public class PostReviewLbActivity extends AppCompatActivity {
     }
 
     public void clickUpload(View v){
-        String serverUrl = "http://thyun85.dothome.co.kr/dailyboard/insertLBReviewDB.php";
+        String serverUrl = "http://thyun85.dothome.co.kr/dailyboard/insertSpotDB.php";
 
         String name = tvName.getText().toString();
         String msg = editMsg.getText().toString();
@@ -129,7 +127,7 @@ public class PostReviewLbActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(PostReviewLbActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(PostSpotActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
 

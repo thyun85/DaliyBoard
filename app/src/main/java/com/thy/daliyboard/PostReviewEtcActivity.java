@@ -39,6 +39,8 @@ public class PostReviewEtcActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_review_etc);
 
+//        getSupportActionBar().setSubtitle("Etc");
+
         iv = findViewById(R.id.iv);
         tvName = findViewById(R.id.tv_getname);
         editMsg = findViewById(R.id.edit_msg);
@@ -64,7 +66,7 @@ public class PostReviewEtcActivity extends AppCompatActivity {
         switch (requestCode){
             case 100:
                 if(grantResults[0] == PackageManager.PERMISSION_DENIED){
-                    Toast.makeText(this, "영상 선택이 불가능합니다.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "이미지 선택이 불가능합니다.", Toast.LENGTH_SHORT).show();
                 }
                 break;
         }

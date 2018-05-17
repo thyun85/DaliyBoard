@@ -16,14 +16,14 @@ import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class Adapter_ReviewLb extends RecyclerView.Adapter {
+public class Adapter_ReviewEtc extends RecyclerView.Adapter {
 
     Context context;
-    ArrayList<ReviewLbItem> reviewLbItems;
+    ArrayList<ReviewEtcItem> reviewEtcItems;
 
-    public Adapter_ReviewLb(Context context, ArrayList<ReviewLbItem> reviewLbItems) {
+    public Adapter_ReviewEtc(Context context, ArrayList<ReviewEtcItem> reviewEtcItems) {
         this.context = context;
-        this.reviewLbItems = reviewLbItems;
+        this.reviewEtcItems = reviewEtcItems;
     }
 
     @Override
@@ -42,19 +42,19 @@ public class Adapter_ReviewLb extends RecyclerView.Adapter {
 
         VH vh = (VH)holder;
 
-        ReviewLbItem reviewLbItem = reviewLbItems.get(position);
+        ReviewEtcItem reviewEtcItem = reviewEtcItems.get(position);
 
-        vh.tvTitle.setText(reviewLbItem.nickName);
-        vh.tvMessage.setText(reviewLbItem.msg);
-        vh.tvTimes.setText(reviewLbItem.upDate);
+        vh.tvTitle.setText(reviewEtcItem.nickName);
+        vh.tvMessage.setText(reviewEtcItem.msg);
+        vh.tvTimes.setText(reviewEtcItem.upDate);
         vh.tbFavorite.setChecked(CheckedLb.isFavorite);
 
-        Glide.with(context).load(reviewLbItem.getImgPath()).into(vh.imageView);
+        Glide.with(context).load(reviewEtcItem.getImgPath()).into(vh.imageView);
 
     }
 
     public int getItemCount() {
-        return reviewLbItems.size();
+        return reviewEtcItems.size();
     }
 
     class VH extends RecyclerView.ViewHolder{
@@ -78,7 +78,7 @@ public class Adapter_ReviewLb extends RecyclerView.Adapter {
                 public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
                     switch (compoundButton.getId()){
                         case R.id.tb_favorite:
-                            CheckedLb.isFavorite = checked;
+//                            CheckedEtc.isFavorite = checked;
                             break;
                     }
                 }
