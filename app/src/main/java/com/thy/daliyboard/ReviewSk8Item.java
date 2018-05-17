@@ -7,6 +7,7 @@ public class ReviewSk8Item {
     String msg;
     String imgPath;
     String upDate;
+    boolean isFavorite = false;
 
     public ReviewSk8Item(int no, String nickName, String msg, String imgPath, String upDate) {
         this.no = no;

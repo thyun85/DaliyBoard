@@ -44,16 +44,6 @@
             android:layout_marginTop="8dp"
             android:layout_marginRight="16dp"/>
 
-        <!--<ImageView-->
-            <!--android:id="@+id/iv_image"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_below="@id/iv_icon"-->
-            <!--android:layout_marginTop="10dp"-->
-            <!--android:layout_marginBottom="10dp"-->
-            <!--android:src="@drawable/img11"-->
-            <!--android:adjustViewBounds="true"/>-->
-
         <VideoView
             android:id="@+id/videoview"
             android:layout_width="match_parent"
@@ -76,17 +66,62 @@
             android:textSize="16sp"
             android:textColor="#000000"/>
 
+        <View
+            android:id="@+id/v1"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/tv_message"
+            android:background="#888888"/>
+
+        <TextView
+            android:id="@+id/tv_reply"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/v1"/>
+
+        <LinearLayout
+            android:id="@+id/linear"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_below="@id/tv_reply"
+            android:gravity="center">
+
+            <EditText
+                android:id="@+id/edit_reply"
+                android:layout_width="260dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:hint="댓글.."/>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:text="확인"/>
+
+        </LinearLayout>
+
+        <View
+            android:id="@+id/v2"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/linear"
+            android:background="#888888"/>
+
         <TextView
             android:id="@+id/tv_times"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/tv_message"
+            android:layout_below="@id/v2"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             android:layout_marginRight="16dp"
             android:layout_marginLeft="16dp"
             android:text="1 hours ago..."
             android:textSize="12sp"/>
+
+
 
     </RelativeLayout>
 

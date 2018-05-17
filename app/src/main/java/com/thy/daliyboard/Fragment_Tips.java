@@ -58,6 +58,7 @@ public class Fragment_Tips extends Fragment {
     String msg;
     String aviPath;
     String date;
+    boolean isLike=false;
 
     SharedPreferences pref;
 

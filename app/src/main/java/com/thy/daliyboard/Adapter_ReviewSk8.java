@@ -47,7 +47,7 @@ public class Adapter_ReviewSk8 extends RecyclerView.Adapter {
         vh.tvTitle.setText(reviewSk8Item.nickName);
         vh.tvMessage.setText(reviewSk8Item.msg);
         vh.tvTimes.setText(reviewSk8Item.upDate);
-        vh.tbFavorite.setChecked(CheckedLb.isFavorite);
+        vh.tbFavorite.setChecked(reviewSk8Item.isFavorite);
 
         Glide.with(context).load(reviewSk8Item.getImgPath()).into(vh.imageView);
 

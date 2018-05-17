@@ -47,7 +47,7 @@ public class Adapter_ReviewEtc extends RecyclerView.Adapter {
         vh.tvTitle.setText(reviewEtcItem.nickName);
         vh.tvMessage.setText(reviewEtcItem.msg);
         vh.tvTimes.setText(reviewEtcItem.upDate);
-        vh.tbFavorite.setChecked(CheckedLb.isFavorite);
+        vh.tbFavorite.setChecked(reviewEtcItem.isFavorite);
 
         Glide.with(context).load(reviewEtcItem.getImgPath()).into(vh.imageView);
 

@@ -7,6 +7,7 @@ public class ReviewLbItem {
     String msg;
     String imgPath;
     String upDate;
+    boolean isFavorite = false;
 
     public ReviewLbItem(int no, String nickName, String msg, String imgPath, String upDate) {
         this.no = no;
