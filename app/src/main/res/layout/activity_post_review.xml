@@ -6,14 +6,24 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="8dp"
-    tools:context=".PostReviewEtcActivity">
+    tools:context=".PostReviewActivity">
+
+    <Spinner
+        android:id="@+id/spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:spinnerMode="dialog"
+        android:prompt="@string/spinner_prompt">
+    </Spinner>
 
     <TextView
         android:id="@+id/tv_getname"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="name"
-        android:textSize="16sp"/>
+        android:textSize="16sp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"/>
 
     <ImageView
         android:id="@+id/iv"

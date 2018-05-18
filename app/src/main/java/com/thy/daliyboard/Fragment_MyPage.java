@@ -23,6 +23,8 @@ public class Fragment_MyPage extends Fragment {
     LoginButton loginButton;
     SharedPreferences pref;
 
+    Button btn; 
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -38,6 +40,26 @@ public class Fragment_MyPage extends Fragment {
                 editor.clear();
                 editor.commit();
 
+            }
+        });
+
+        btn = view.findViewById(R.id.loadBtn);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SharedPreferences pref = getActivity().getSharedPreferences("facebookLoginData", getActivity().MODE_PRIVATE);
+
+                String id = pref.getString("Id", "no");
+                String name = pref.getString("Name", "no name");
+                String email = pref.getString("Email", "no email");
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setTitle("다이얼로그");
+                builder.setIcon(android.R.drawable.ic_dialog_alert);
+                builder.setMessage(id+"\n"+name+"\n"+email+"\n");
+
+                AlertDialog dialog = builder.create();
+                dialog.show();
             }
         });
 

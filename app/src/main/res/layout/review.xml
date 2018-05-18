@@ -35,4 +35,16 @@
 
     </TabHost>
 
+    <com.melnykov.fab.FloatingActionButton
+        android:id="@+id/fab_review"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="24dp"
+        android:src="@drawable/ic_add"
+        android:background="#5b4747"
+        app:fab_type="mini"/>
+
 </RelativeLayout>

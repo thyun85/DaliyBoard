@@ -48,13 +48,4 @@
         android:clickable="true"
         android:onClick="clickGuest"/>
 
-    <Button
-        android:id="@+id/loadBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/tv_guest"
-        android:layout_centerHorizontal="true"
-        android:text="clickLoad"
-        android:onClick="clickLoad"/>
-
 </RelativeLayout>

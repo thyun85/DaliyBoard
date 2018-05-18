@@ -75,7 +75,7 @@ public class Fragment_Tips extends Fragment {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         recyclerViewTip.setLayoutManager(layoutManager);
 
-//        loadDB();
+        loadDB();
 
         refreshLayout = view.findViewById(R.id.layout_swipe);
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -83,7 +83,7 @@ public class Fragment_Tips extends Fragment {
             public void onRefresh() {
                 //갱신작업 수행.
                 tipsItems.clear();
-//                loadDB();
+                loadDB();
 
             }
         });
@@ -158,29 +158,31 @@ public class Fragment_Tips extends Fragment {
                 Log.i("aaa", "a3");
                 Log.i("aaa", "line : " + line);
 
+                if(line != null){
+                    //읽어온 데이터 문자열에서 db의 row(레코드)별로 배열로 분리하기
+                    String[] rows = line.split(";");
 
-                //읽어온 데이터 문자열에서 db의 row(레코드)별로 배열로 분리하기
-                String[] rows = line.split(";");
+                    tipsItems.clear();
+                    Log.i("aaa", "a4 : " + rows.length);
+                    for(String row : rows){
+                        String[] datas = row.split("&");
 
-                tipsItems.clear();
-                Log.i("aaa", "a4 : " + rows.length);
-                for(String row : rows){
-                    String[] datas = row.split("&");
+                        for (int i = 0; i < datas.length; i++) Log.i("aaa2", i + " : " + datas[i]);
+                        if(datas.length != 5) continue;
+                        Log.i("aaa", "a5");
+                        no = Integer.parseInt(datas[0]);
+                        name = datas[1];
+                        msg = datas[2];
+                        aviPath = "http://thyun85.dothome.co.kr/dailyboard/"+datas[3];
+                        date = datas[4];
 
-                    for (int i = 0; i < datas.length; i++) Log.i("aaa2", i + " : " + datas[i]);
-                    if(datas.length != 5) continue;
-                    Log.i("aaa", "a5");
-                    no = Integer.parseInt(datas[0]);
-                    name = datas[1];
-                    msg = datas[2];
-                    aviPath = "http://thyun85.dothome.co.kr/dailyboard/"+datas[3];
-                    date = datas[4];
+                        tipsItems.add(0, new TipsItem(no, name, msg, aviPath, date));
 
-                    tipsItems.add(0, new TipsItem(no, name, msg, aviPath, date));
-
-                    publishProgress();
-                    Log.i("aaa", "a6");
+                        publishProgress();
+                        Log.i("aaa", "a6");
+                    }
                 }
+
             } catch (IOException e) {
                 e.printStackTrace();
             }

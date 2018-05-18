@@ -12,9 +12,13 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,27 +30,48 @@ import com.android.volley.request.SimpleMultiPartRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 
-public class PostReviewLbActivity extends AppCompatActivity {
+public class PostReviewActivity extends AppCompatActivity {
 
     ImageView iv;
     TextView tvName;
     EditText editMsg;
     String imgPath;
 
+    String name, msg, type, email;
+
+    Spinner spinner;
+    ArrayAdapter adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_post_review_lb);
+        setContentView(R.layout.activity_post_review);
 
-//        getSupportActionBar().setSubtitle("LB");
+        spinner = findViewById(R.id.spinner);
+        adapter = ArrayAdapter.createFromResource(this, R.array.datas, R.layout.spinner_selected);
+        //스피너를 클릭해서 드롭다운된 아이템들의 View모양 설정
+        adapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+
+        //스피너의 아이템이 선택되는 것을 듣는 리스너
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+                type = spinner.getSelectedItem().toString();
+                Log.i("type", type);
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {}
+        });
 
         iv = findViewById(R.id.iv);
         tvName = findViewById(R.id.tv_getname);
         editMsg = findViewById(R.id.edit_msg);
 
         SharedPreferences pref = getSharedPreferences("facebookLoginData", MODE_PRIVATE);
-        String name = pref.getString("Name", "no name");
-
+        name = pref.getString("Name", "no name");
+        email = pref.getString("Email", "no email");
+        Log.i("name", name);
         tvName.setText(name);
 
         //외부저장소 읽고쓰기 권한 퍼미션 체크 및 요청
@@ -114,10 +139,9 @@ public class PostReviewLbActivity extends AppCompatActivity {
     }
 
     public void clickUpload(View v){
-        String serverUrl = "http://thyun85.dothome.co.kr/dailyboard/insertLBReviewDB.php";
+        String serverUrl = "http://thyun85.dothome.co.kr/dailyboard/insertReviewDB.php";
 
-        String name = tvName.getText().toString();
-        String msg = editMsg.getText().toString();
+        msg = editMsg.getText().toString();
 
         //insertpostDB.php에 보낼 파일전송요청 객체 생성
         SimpleMultiPartRequest multiPartRequest = new SimpleMultiPartRequest(Request.Method.POST, serverUrl, new Response.Listener<String>() {
@@ -129,16 +153,22 @@ public class PostReviewLbActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(PostReviewLbActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(PostReviewActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
 
+        Log.i("name", name);
+        Log.i("email", email);
+
         //요청객체에 데이터 추가하기
         multiPartRequest.addStringParam("name", name);
+        multiPartRequest.addStringParam("email", email);
         multiPartRequest.addStringParam("msg", msg);
         if(imgPath != null){
             multiPartRequest.addFile("upload", imgPath);
         }
+        multiPartRequest.addStringParam("type", type);
+        Log.i("type", type);
 
         //요청큐 객체 생성하기
         RequestQueue requestQueue = Volley.newRequestQueue(this);

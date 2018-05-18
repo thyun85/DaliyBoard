@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.android.volley.Request;
@@ -25,24 +24,24 @@ import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class Adapter_ReviewLb extends RecyclerView.Adapter {
+public class Adapter_Review extends RecyclerView.Adapter {
 
     Context context;
-    ArrayList<ReviewLbItem> reviewLbItems;
+    ArrayList<ReviewItem> reviewItems;
     boolean isEditable;
 
     String id, msg;
 
-    public Adapter_ReviewLb(Context context, ArrayList<ReviewLbItem> reviewLbItems) {
+    public Adapter_Review(Context context, ArrayList<ReviewItem> reviewItems) {
         this.context = context;
-        this.reviewLbItems = reviewLbItems;
+        this.reviewItems = reviewItems;
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         LayoutInflater inflater = LayoutInflater.from(context);
-        View tipsView = inflater.inflate(R.layout.reviewlb_recycler_item, parent, false);
+        View tipsView = inflater.inflate(R.layout.review_recycler_item, parent, false);
 
         VH holder = new VH(tipsView);
 
@@ -55,21 +54,21 @@ public class Adapter_ReviewLb extends RecyclerView.Adapter {
         isEditable=false;
         VH vh = (VH)holder;
 
-        ReviewLbItem reviewLbItem = reviewLbItems.get(position);
+        ReviewItem reviewItem = reviewItems.get(position);
 
-        vh.tvTitle.setText(reviewLbItem.nickName);
-        vh.tvMessage.setText(reviewLbItem.msg);
-        vh.tvTimes.setText(reviewLbItem.upDate);
-        vh.tbFavorite.setChecked(reviewLbItem.isFavorite);
+        vh.tvTitle.setText(reviewItem.nickName);
+        vh.tvMessage.setText(reviewItem.msg);
+        vh.tvTimes.setText(reviewItem.upDate);
+        vh.tbFavorite.setChecked(reviewItem.isFavorite);
 
-        Glide.with(context).load(reviewLbItem.getImgPath()).into(vh.imageView);
+        Glide.with(context).load(reviewItem.getImgPath()).into(vh.imageView);
 
         isEditable=true;
 
     }
 
     public int getItemCount() {
-        return reviewLbItems.size();
+        return reviewItems.size();
     }
 
     class VH extends RecyclerView.ViewHolder{
@@ -94,11 +93,11 @@ public class Adapter_ReviewLb extends RecyclerView.Adapter {
                     switch (compoundButton.getId()){
                         case R.id.tb_favorite:
                             if(isEditable){
-                                reviewLbItems.get(getLayoutPosition()).isFavorite = checked;
+                                reviewItems.get(getLayoutPosition()).isFavorite = checked;
                                 //서버 업로드
                                 SharedPreferences pref = context.getSharedPreferences("facebookLoginData", context.MODE_PRIVATE);
                                 id = pref.getString("Id", "no");
-                                msg = reviewLbItems.get(getLayoutPosition()).getMsg();
+                                msg = reviewItems.get(getLayoutPosition()).getMsg();
                                 upload();
                             }
 

@@ -4,5 +4,6 @@
     <string name="facebook_app_id">1919633984766517</string>
     <string name="fb_login_protocol_scheme">fb1919633984766517</string>
 
+    <string name="spinner_prompt">분류 선택</string>
 
 </resources>

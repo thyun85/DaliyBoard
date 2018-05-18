@@ -29,6 +29,7 @@ import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
+import com.facebook.Profile;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
@@ -149,6 +150,15 @@ public class LoginActivity extends AppCompatActivity {
                 dialog.setMessage("Loading...");
                 dialog.show();
 
+                //프로필
+//                Thread thread = new Thread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        Profile profile = Profile.getCurrentProfile();
+//                        String profilePic = profile.getProfilePictureUri(200,200).toString();
+//                    }
+//                });
+
                 String accesstoken = loginResult.getAccessToken().getToken();
 
                 GraphRequest request = GraphRequest.newMeRequest(loginResult.getAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
@@ -208,23 +218,6 @@ public class LoginActivity extends AppCompatActivity {
 
         editor.commit();    //editor에게 완료됨을 알림.
     }
-
-    public void clickLoad(View v){
-        SharedPreferences pref = getSharedPreferences("facebookLoginData", MODE_PRIVATE);
-
-        String id = pref.getString("Id", "no");
-        String name = pref.getString("Name", "no name");
-        String email = pref.getString("Email", "no email");
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("다이얼로그");
-        builder.setIcon(android.R.drawable.ic_dialog_alert);
-        builder.setMessage(id+"\n"+name+"\n"+email+"\n");
-
-        AlertDialog dialog = builder.create();
-        dialog.show();
-    }
-
 
     public void sendInfo(){
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);

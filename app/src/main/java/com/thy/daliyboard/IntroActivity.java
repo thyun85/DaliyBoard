@@ -90,7 +90,7 @@ public class IntroActivity extends AppCompatActivity {
                 Log.i("aaa", "line : " + line);
                 //읽어온 데이터 문자열에서 db의 row(레코드)별로 배열로 분리하기
                 String[] rows = line.split(";");
-                Log.i("aaa", "line : " + rows[0]);
+                Log.i(" aaa", "line : " + rows[0]);
                 Log.i("aaa", "a4 : " + rows.length);
                 dbId = rows[0];
                 compareDB();
