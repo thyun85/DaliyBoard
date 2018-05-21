@@ -23,7 +23,7 @@ public class Fragment_MyPage extends Fragment {
     LoginButton loginButton;
     SharedPreferences pref;
 
-    Button btn; 
+    Button btn;
 
     @Nullable
     @Override

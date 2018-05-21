@@ -6,18 +6,26 @@ public class ReviewItem {
     String nickName;
     String msg;
     String imgPath;
-    String type;
+//    String type;
     String upDate;
     boolean isFavorite = false;
 
-    public ReviewItem(int no, String nickName, String msg, String imgPath, String type, String upDate) {
+    public ReviewItem(int no, String nickName, String msg, String imgPath, String upDate) {
         this.no = no;
         this.nickName = nickName;
         this.msg = msg;
         this.imgPath = imgPath;
-        this.type = type;
         this.upDate = upDate;
     }
+
+//    public ReviewItem(int no, String nickName, String msg, String imgPath, String type, String upDate) {
+//        this.no = no;
+//        this.nickName = nickName;
+//        this.msg = msg;
+//        this.imgPath = imgPath;
+//        this.type = type;
+//        this.upDate = upDate;
+//    }
 
     public int getNo() {
         return no;
@@ -59,11 +67,19 @@ public class ReviewItem {
         this.upDate = upDate;
     }
 
-    public String getType() {
-        return type;
+//    public String getType() {
+//        return type;
+//    }
+//
+//    public void setType(String type) {
+//        this.type = type;
+//    }
+
+    public boolean isFavorite() {
+        return isFavorite;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setFavorite(boolean favorite) {
+        isFavorite = favorite;
     }
 }

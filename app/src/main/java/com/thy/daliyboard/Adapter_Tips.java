@@ -49,15 +49,6 @@ public class Adapter_Tips extends RecyclerView.Adapter {
 
         VH vh = (VH)holder;
 
-//        Feed feed = feeds.get(position);
-//
-//        vh.tvTitle.setText(feed.title);
-//        vh.tvMessage.setText(feed.message);
-//        vh.tvTimes.setText(feed.times);
-//
-//        Glide.with(context).load(feed.icon).into(vh.ivIcon);
-//        Glide.with(context).load(feed.getImageURL()).into(vh.imageView);
-
         TipsItem tipsItem = tipsItems.get(position);
 
         vh.tvTitle.setText(tipsItem.nickName);

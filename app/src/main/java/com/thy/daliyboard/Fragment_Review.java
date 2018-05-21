@@ -59,13 +59,15 @@ public class Fragment_Review extends Fragment {
     int no;
     String name, msg, imgPath, type, date;
     String tag = "Lb";
-    String serverUrl, likeUrl;
+    String serverUrl;
 
-    String status;
+    String status, email;
 
-    String reviewNo, reviewMsg, userID;
+    String reviewNo = null;
 
     ToggleButton tbFavorite;
+
+    String[] datas;
 
     @Nullable
     @Override
@@ -75,7 +77,6 @@ public class Fragment_Review extends Fragment {
 
         tbFavorite = view.findViewById(R.id.tb_favorite);
         tabHost = view.findViewById(android.R.id.tabhost);
-
 
         tabHost.setup();
 
@@ -173,6 +174,7 @@ public class Fragment_Review extends Fragment {
             layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
             recyclerViewReview.setLayoutManager(layoutManager);
 
+            reviewItems.clear();
             loadDB();
 
             refreshLayout = view.findViewById(R.id.layout_swipe);
@@ -192,6 +194,9 @@ public class Fragment_Review extends Fragment {
         actionButton = view.findViewById(R.id.fab_review);
         actionButton.setOnClickListener(clickFab);
 
+        SharedPreferences pref = getActivity().getSharedPreferences("facebookLoginData", getActivity().MODE_PRIVATE);
+        email = pref.getString("Email", "no email");
+
         return view;
     }
 
@@ -205,128 +210,6 @@ public class Fragment_Review extends Fragment {
         }
     };
 
-//    private void loadLikeDB(){
-//        likeUrl = "http://thyun85.dothome.co.kr/dailyboard/loadLikeLBDB.php";
-//
-//        try {
-//            URL url = new URL(likeUrl);
-//            likeDBTask = new LoadLikeDBTask();
-//            likeDBTask.execute(url);
-//
-//        } catch (MalformedURLException e) {
-//            e.printStackTrace();
-//        }
-//    }
-//
-//    class LoadLikeDBTask extends AsyncTask<URL, Void, String>{
-//
-//        @Override
-//        protected String doInBackground(URL... urls) {
-//            URL url = urls[0];
-//            Log.i("aaa", "a1");
-//            HttpURLConnection connection = null;
-//            try {
-//                connection = (HttpURLConnection)url.openConnection();
-//                connection.setRequestMethod("GET");
-//                connection.setDoInput(true);
-//                connection.setUseCaches(false);
-//                Log.i("aaa", "a2");
-//                InputStream is = connection.getInputStream();
-//                InputStreamReader isr = new InputStreamReader(is, "utf-8");
-//                BufferedReader reader = new BufferedReader(isr);
-//
-//                String line = reader.readLine();
-//                Log.i("aaa", "a3");
-//                Log.i("aaa", "line : " + line);
-//
-//                //읽어온 데이터 문자열에서 db의 row(레코드)별로 배열로 분리하기
-//                String[] rows = line.split(";");
-//
-//                if(tag.equals("tab1")){
-//                    reviewItems.clear();
-//                    Log.i("aaa", "a4 : " + rows.length);
-//                    Log.i("aaa", "line : " + line);
-//                    for(String row : rows){
-//                        String[] datas = row.split("&");
-//
-//                        for (int i = 0; i < datas.length; i++) Log.i("aaa2", i + " : " + datas[i]);
-//                        if(datas.length != 4) continue;
-//                        Log.i("aaa", "a5");
-//                        reviewNo = datas[1];
-//                        reviewMsg = datas[2];
-//                        userID = datas[3];
-//
-//                        SharedPreferences pref = getActivity().getSharedPreferences("facebookLoginData", getActivity().MODE_PRIVATE);
-//                        String id = pref.getString("Id", "no Id");
-//
-//                        if(id.equals(userID) && reviewMsg.equals(msg)){
-//                            reviewItems.get(no).isFavorite = true;
-//                        }
-////                        reviewItems.add(0, new ReviewItem(no, name, msg, imgPath, date));
-//
-//                        publishProgress();
-//                        Log.i("aaa", "a6");
-//                    }
-//                }else if (tag.equals("tab2")){
-//                    reviewSk8Items.clear();
-//                    Log.i("aaa", "a4 : " + rows.length);
-//                    Log.i("aaa", "line : " + line);
-//                    for(String row : rows){
-//                        String[] datas = row.split("&");
-//
-//                        for (int i = 0; i < datas.length; i++) Log.i("aaa2", i + " : " + datas[i]);
-//                        if(datas.length != 5) continue;
-//                        Log.i("aaa", "a5");
-//                        reviewNo = datas[1];
-//                        reviewMsg = datas[2];
-//                        userID = datas[3];
-//
-//                        publishProgress();
-//                        Log.i("aaa", "a6");
-//                    }
-//                }else if (tag.equals("tab3")){
-//                    reviewEtcItems.clear();
-//                    Log.i("aaa", "a4 : " + rows.length);
-//                    Log.i("aaa", "line : " + line);
-//                    for(String row : rows){
-//                        String[] datas = row.split("&");
-//
-//                        for (int i = 0; i < datas.length; i++) Log.i("aaa2", i + " : " + datas[i]);
-//                        if(datas.length != 5) continue;
-//                        Log.i("aaa", "a5");
-//                        reviewNo = datas[1];
-//                        reviewMsg = datas[2];
-//                        userID = datas[3];
-//
-//                        publishProgress();
-//                        Log.i("aaa", "a6");
-//                    }
-//                }
-//
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//
-//            return "읽기 완료";
-//        }
-//
-//        protected void onProgressUpdate(Void... values) {
-//            super.onProgressUpdate(values);
-//
-//            //리사이클러뷰의 갱신요청..
-//            adapterReviewLb.notifyDataSetChanged();
-//            Log.i("notify", "success");
-//        }
-//
-//        @Override
-//        protected void onPostExecute(String s) {
-//            super.onPostExecute(s);
-//
-//            //swipeRefresh 로딩아이콘 지우기
-//            refreshLayout.setRefreshing(false);
-//        }
-//    }
-
     public void loadDB(){
         serverUrl = "http://thyun85.dothome.co.kr/dailyboard/loadReviewDB.php";
 
@@ -335,34 +218,69 @@ public class Fragment_Review extends Fragment {
             @Override
             public void onResponse(String response) {
                 //insertDB.php의 echo 결과 보여주기
-//                new AlertDialog.Builder(getActivity()).setMessage(response).setPositiveButton("ok", null).create().show();
+                new AlertDialog.Builder(getActivity()).setMessage(response).setPositiveButton("ok", null).create().show();
 
                 //읽어온 데이터 문자열에서 db의 row(레코드)별로 배열로 분리하기
                 String[] rows = response.split(";");
 
                 reviewItems.clear();
                 Log.i("aaa", "a4 : " + rows.length);
-                Log.i("aaa", "line : " + response);
+                Log.i("aaa", "response : " + response);
 
-                for(String row : rows){
-                    String[] datas = row.split("&");
+                for(String row : rows) {
+                    datas = row.split("&");
 
+                    //배열 내용 확인
                     for (int i = 0; i < datas.length; i++) Log.i("aaa2", i + " : " + datas[i]);
-                    if(datas.length != 7) continue;
-                    Log.i("aaa", "a5");
-                    no = Integer.parseInt(datas[0]);
-                    name = datas[1];
-                    msg = datas[3];
-                    imgPath = "http://thyun85.dothome.co.kr/dailyboard/"+datas[4];
-                    type = datas[5];
-                    date = datas[6];
 
-                    reviewItems.add(0, new ReviewItem(no, name, msg, imgPath, type, date));
+                    if(datas.length == 5){
+                        no = Integer.parseInt(datas[0]);
+                        name = datas[1];
+                        msg = datas[2];
+                        imgPath = "http://thyun85.dothome.co.kr/dailyboard/"+datas[3];
+                        date = datas[4];
 
-                    adapterReview.notifyDataSetChanged();
-                    refreshLayout.setRefreshing(false);
-                    Log.i("aaa", "a6");
+                        reviewItems.add(0, new ReviewItem(no, name, msg, imgPath, date));
+
+                        adapterReview.notifyDataSetChanged();
+                        refreshLayout.setRefreshing(false);
+                        Log.i("aaa", "a6");
+                    }else if(datas.length == 6){
+                        no = Integer.parseInt(datas[0]);
+                        name = datas[1];
+                        msg = datas[2];
+                        imgPath = "http://thyun85.dothome.co.kr/dailyboard/"+datas[3];
+                        date = datas[4];
+                        reviewNo = datas[5];
+                        reviewItems.add(0, new ReviewItem(no, name, msg, imgPath, date));
+
+                        adapterReview.notifyDataSetChanged();
+                        refreshLayout.setRefreshing(false);
+                        Log.i("aaa", "a6");
+                    }
                 }
+
+
+//                for(String row : rows){
+//                    String[] datas = row.split("&");
+//                    Log.i("aaa", "a5 : " + datas.length);
+//                    //배열 내용 확인
+//                    for (int i = 0; i < datas.length; i++) Log.i("aaa2", i + " : " + datas[i]);
+//
+//                    if(datas.length != 6) continue;
+//
+//                    no = Integer.parseInt(datas[0]);
+//                    name = datas[1];
+//                    msg = datas[2];
+//                    imgPath = "http://thyun85.dothome.co.kr/dailyboard/"+datas[3];
+//                    date = datas[4];
+//                    reviewNo = datas[5];
+//                    reviewItems.add(0, new ReviewItem(no, name, msg, imgPath, date));
+//
+//                    adapterReview.notifyDataSetChanged();
+//                    refreshLayout.setRefreshing(false);
+//                    Log.i("aaa", "a6");
+//                }
 
             }
         }, new Response.ErrorListener() {
@@ -374,12 +292,14 @@ public class Fragment_Review extends Fragment {
 
         //요청객체에 데이터 추가하기
         multiPartRequest.addStringParam("status", status);
+        multiPartRequest.addStringParam("email", email);
 
         //요청큐 객체 생성하기
         RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
 
         //요청큐에 요청객체 추가
         requestQueue.add(multiPartRequest);
+
     }
 
 }
