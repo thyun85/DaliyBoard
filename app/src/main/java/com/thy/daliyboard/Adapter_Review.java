@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,7 +31,7 @@ public class Adapter_Review extends RecyclerView.Adapter {
     ArrayList<ReviewItem> reviewItems;
     boolean isEditable;
 
-    String id, msg;
+    String id, msg, email;
 
     public Adapter_Review(Context context, ArrayList<ReviewItem> reviewItems) {
         this.context = context;
@@ -59,7 +60,6 @@ public class Adapter_Review extends RecyclerView.Adapter {
         vh.tvTitle.setText(reviewItem.nickName);
         vh.tvMessage.setText(reviewItem.msg);
         vh.tvTimes.setText(reviewItem.upDate);
-        vh.tbFavorite.setChecked(reviewItem.isFavorite);
 
         Glide.with(context).load(reviewItem.getImgPath()).into(vh.imageView);
 
@@ -87,29 +87,49 @@ public class Adapter_Review extends RecyclerView.Adapter {
             tvTimes = itemView.findViewById(R.id.tv_times);
             imageView = itemView.findViewById(R.id.iv_image);
             tbFavorite = itemView.findViewById(R.id.tb_favorite);
-            tbFavorite.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
-                    switch (compoundButton.getId()){
-                        case R.id.tb_favorite:
-                            if(isEditable){
-                                reviewItems.get(getLayoutPosition()).isFavorite = checked;
-                                //서버 업로드
-                                SharedPreferences pref = context.getSharedPreferences("facebookLoginData", context.MODE_PRIVATE);
-                                id = pref.getString("Id", "no");
-                                msg = reviewItems.get(getLayoutPosition()).getMsg();
-                                upload();
-                            }
+//            tbFavorite.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//                @Override
+//                public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+//                    switch (compoundButton.getId()){
+//                        case R.id.tb_favorite:
+//                            if(isEditable){
+//                                reviewItems.get(getLayoutPosition()).isFavorite = checked;
+//                                SharedPreferences pref = context.getSharedPreferences("facebookLoginData", context.MODE_PRIVATE);
+//                                email = pref.getString("Email", "no email");
+//                                msg = reviewItems.get(getLayoutPosition()).getMsg();
+//                                upload();
+//                            }
+//
+//                            break;
+//                    }
+//                }
+//            });
 
-                            break;
+            tbFavorite.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(tbFavorite.isChecked()){
+                        //속성값 삭제(php)
+                        reviewItems.get(getLayoutPosition()).setFavorite(false);
+                        SharedPreferences pref = context.getSharedPreferences("facebookLoginData", context.MODE_PRIVATE);
+                        email = pref.getString("Email", "no email");
+                        msg = reviewItems.get(getLayoutPosition()).getMsg();
+                        delete();
+                    }else{
+                        //속성값 insert
+                        reviewItems.get(getLayoutPosition()).setFavorite(true);
+                        SharedPreferences pref = context.getSharedPreferences("facebookLoginData", context.MODE_PRIVATE);
+                        email = pref.getString("Email", "no email");
+                        msg = reviewItems.get(getLayoutPosition()).getMsg();
+                        upload();
                     }
                 }
             });
         }
 
         public void upload(){
-            String serverUrl = "http://thyun85.dothome.co.kr/dailyboard/insertLikeLbDB.php";
-
+            String serverUrl = "http://thyun85.dothome.co.kr/dailyboard/deleteLikeDB.php";
+            Log.i("aaa", serverUrl);
             //insertpostDB.php에 보낼 파일전송요청 객체 생성
             SimpleMultiPartRequest multiPartRequest = new SimpleMultiPartRequest(Request.Method.POST, serverUrl, new Response.Listener<String>() {
                 @Override
@@ -124,7 +144,7 @@ public class Adapter_Review extends RecyclerView.Adapter {
             });
 
             //요청객체에 데이터 추가하기
-            multiPartRequest.addStringParam("id", id);
+            multiPartRequest.addStringParam("email", email);
             multiPartRequest.addStringParam("msg", msg);
 
             //요청큐 객체 생성하기
@@ -132,9 +152,33 @@ public class Adapter_Review extends RecyclerView.Adapter {
 
             //요청큐에 요청객체 추가..
             requestQueue.add(multiPartRequest);
+        }
 
-            if(requestQueue != null){
-            }
+        public void delete(){
+            String serverUrl = "http://thyun85.dothome.co.kr/dailyboard/insertLikeDB.php";
+            Log.i("aaa", serverUrl);
+            //insertpostDB.php에 보낼 파일전송요청 객체 생성
+            SimpleMultiPartRequest multiPartRequest = new SimpleMultiPartRequest(Request.Method.POST, serverUrl, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    new AlertDialog.Builder(context).setMessage(response).create().show();
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+
+                }
+            });
+
+            //요청객체에 데이터 추가하기
+            multiPartRequest.addStringParam("email", email);
+            multiPartRequest.addStringParam("msg", msg);
+
+            //요청큐 객체 생성하기
+            RequestQueue requestQueue = Volley.newRequestQueue(context);
+
+            //요청큐에 요청객체 추가..
+            requestQueue.add(multiPartRequest);
         }
     }
 }
