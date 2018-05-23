@@ -12,6 +12,7 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -31,6 +32,8 @@ public class PostSpotActivity extends AppCompatActivity {
     ImageView iv;
     TextView tvName;
     EditText editMsg;
+
+    String name, msg, email;
     String imgPath;
 
     @Override
@@ -43,7 +46,8 @@ public class PostSpotActivity extends AppCompatActivity {
         editMsg = findViewById(R.id.edit_msg);
 
         SharedPreferences pref = getSharedPreferences("facebookLoginData", MODE_PRIVATE);
-        String name = pref.getString("Name", "no name");
+        name = pref.getString("Name", "no name");
+        email = pref.getString("Email", "no email");
 
         tvName.setText(name);
 
@@ -63,7 +67,7 @@ public class PostSpotActivity extends AppCompatActivity {
         switch (requestCode){
             case 100:
                 if(grantResults[0] == PackageManager.PERMISSION_DENIED){
-                    Toast.makeText(this, "영상 선택이 불가능합니다.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "이미지 선택이 불가능합니다.", Toast.LENGTH_SHORT).show();
                 }
                 break;
         }
@@ -114,15 +118,15 @@ public class PostSpotActivity extends AppCompatActivity {
     public void clickUpload(View v){
         String serverUrl = "http://thyun85.dothome.co.kr/dailyboard/insertSpotDB.php";
 
-        String name = tvName.getText().toString();
-        String msg = editMsg.getText().toString();
+        name = tvName.getText().toString();
+        msg = editMsg.getText().toString();
 
         //insertpostDB.php에 보낼 파일전송요청 객체 생성
         SimpleMultiPartRequest multiPartRequest = new SimpleMultiPartRequest(Request.Method.POST, serverUrl, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 //insertpostDB.php의 echo 결과 보여주기
-//                new AlertDialog.Builder(PostActivity.this).setMessage(response).setPositiveButton("OK", null).create().show();
+//                new AlertDialog.Builder(PostTipsActivity.this).setMessage(response).setPositiveButton("OK", null).create().show();
             }
         }, new Response.ErrorListener() {
             @Override
@@ -133,10 +137,13 @@ public class PostSpotActivity extends AppCompatActivity {
 
         //요청객체에 데이터 추가하기
         multiPartRequest.addStringParam("name", name);
+        multiPartRequest.addStringParam("email", email);
         multiPartRequest.addStringParam("msg", msg);
         if(imgPath != null){
             multiPartRequest.addFile("upload", imgPath);
         }
+
+        Log.i("email", email+"");
 
         //요청큐 객체 생성하기
         RequestQueue requestQueue = Volley.newRequestQueue(this);

@@ -35,11 +35,13 @@
             android:layout_marginLeft="8dp"
             android:layout_marginTop="16dp"/>
 
-        <ImageView
-            android:id="@+id/iv_favorite"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_empty_star"
+        <ToggleButton
+            android:id="@+id/tb_tips_favorite"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/tb_favorite"
+            android:textOn=""
+            android:textOff=""
             android:layout_alignParentRight="true"
             android:layout_marginTop="8dp"
             android:layout_marginRight="16dp"/>
@@ -53,11 +55,48 @@
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"/>
 
+        <ToggleButton
+            android:id="@+id/tb_tips_like"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:background="@drawable/tb_like"
+            android:textOn=""
+            android:textOff=""
+            android:layout_below="@id/videoview"
+            android:layout_marginRight="4dp"/>
+
+        <ImageView
+            android:id="@+id/iv_reply"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:src="@drawable/ic_reply"
+            android:layout_below="@id/videoview"
+            android:layout_toRightOf="@id/tb_tips_like"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="좋아요"
+            android:layout_below="@id/videoview"
+            android:layout_toLeftOf="@id/likecount"
+            android:layout_marginTop="4dp"
+            android:layout_marginRight="4dp"/>
+
+        <TextView
+            android:id="@+id/likecount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="00"
+            android:layout_below="@id/videoview"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="4dp"
+            android:layout_marginRight="6dp"/>
+
         <TextView
             android:id="@+id/tv_message"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/videoview"
+            android:layout_below="@id/tb_tips_like"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             android:layout_marginRight="16dp"
@@ -66,54 +105,11 @@
             android:textSize="16sp"
             android:textColor="#000000"/>
 
-        <View
-            android:id="@+id/v1"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_below="@id/tv_message"
-            android:background="#888888"/>
-
-        <TextView
-            android:id="@+id/tv_reply"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/v1"/>
-
-        <LinearLayout
-            android:id="@+id/linear"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_below="@id/tv_reply"
-            android:gravity="center">
-
-            <EditText
-                android:id="@+id/edit_reply"
-                android:layout_width="260dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:hint="댓글.."/>
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:text="확인"/>
-
-        </LinearLayout>
-
-        <View
-            android:id="@+id/v2"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_below="@id/linear"
-            android:background="#888888"/>
-
         <TextView
             android:id="@+id/tv_times"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/v2"
+            android:layout_below="@id/tv_message"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             android:layout_marginRight="16dp"

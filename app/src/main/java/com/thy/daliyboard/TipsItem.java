@@ -7,6 +7,8 @@ public class TipsItem {
     String msg;
     String aviPath;
     String upDate;
+    boolean isFavorite = false;
+    boolean isLike = false;
 
     public TipsItem(int no, String nickName, String msg, String aviPath, String upDate) {
         this.no = no;
@@ -14,6 +16,25 @@ public class TipsItem {
         this.msg = msg;
         this.aviPath = aviPath;
         this.upDate = upDate;
+    }
+
+    public TipsItem(int no, String nickName, String msg, String aviPath, String upDate, boolean isFavorite) {
+        this.no = no;
+        this.nickName = nickName;
+        this.msg = msg;
+        this.aviPath = aviPath;
+        this.upDate = upDate;
+        this.isFavorite = isFavorite;
+    }
+
+    public TipsItem(int no, String nickName, String msg, String aviPath, String upDate, boolean isFavorite, boolean isLike) {
+        this.no = no;
+        this.nickName = nickName;
+        this.msg = msg;
+        this.aviPath = aviPath;
+        this.upDate = upDate;
+        this.isFavorite = isFavorite;
+        this.isLike = isLike;
     }
 
     public int getNo() {
@@ -56,5 +77,19 @@ public class TipsItem {
         this.upDate = upDate;
     }
 
+    public boolean isFavorite() {
+        return isFavorite;
+    }
 
+    public void setFavorite(boolean favorite) {
+        isFavorite = favorite;
+    }
+
+    public boolean isLike() {
+        return isLike;
+    }
+
+    public void setLike(boolean like) {
+        isLike = like;
+    }
 }

@@ -15,8 +15,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 import android.widget.VideoView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.error.VolleyError;
+import com.android.volley.request.SimpleMultiPartRequest;
+import com.android.volley.toolbox.Volley;
 import com.melnykov.fab.FloatingActionButton;
 
 import java.io.BufferedReader;
@@ -43,13 +50,15 @@ public class Fragment_Spot extends Fragment {
 
     FloatingActionButton actionButton;
 
-    LoadDBTask task;
-
     int no;
-    String name;
-    String msg;
-    String aviPath;
-    String date;
+    String name, msg, imgPath, date;
+    String email;
+    String serverUrl_Spot;
+
+    String favoriteNo = null;
+    String likeNo = null;
+
+    String[] datas;
 
     @Nullable
     @Override
@@ -64,13 +73,15 @@ public class Fragment_Spot extends Fragment {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         recyclerViewSpot.setLayoutManager(layoutManager);
 
+        loadDB();
+
         refreshLayout = view.findViewById(R.id.layout_swipe);
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 //갱신작업 수행.
                 spotItems.clear();
-//                loadDB();
+                loadDB();
 
             }
         });
@@ -89,86 +100,94 @@ public class Fragment_Spot extends Fragment {
 
         adapterSpot.notifyDataSetChanged();
 
+        SharedPreferences pref = getActivity().getSharedPreferences("facebookLoginData", getActivity().MODE_PRIVATE);
+        email = pref.getString("Email", "no email");
+
         return view;
     }
 
     private  void loadDB(){
-        String serverUrl = "http://thyun85.dothome.co.kr/dailyboard/loadSpotDB.php";
+        serverUrl_Spot = "http://thyun85.dothome.co.kr/dailyboard/loadSpotDB.php";
 
-        try {
-            URL url = new URL(serverUrl);
-            task = new LoadDBTask();
-            task.execute(url);
-
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    class LoadDBTask extends AsyncTask<URL, Void, String> {
-
-        @Override
-        protected String doInBackground(URL... urls) {
-            URL url = urls[0];
-            Log.i("aaa", "a1");
-            HttpURLConnection connection = null;
-            try {
-                connection = (HttpURLConnection)url.openConnection();
-                connection.setRequestMethod("GET");
-                connection.setDoInput(true);
-                connection.setUseCaches(false);
-                Log.i("aaa", "a2");
-                InputStream is = connection.getInputStream();
-                InputStreamReader isr = new InputStreamReader(is, "utf-8");
-                BufferedReader reader = new BufferedReader(isr);
-
-                String line = reader.readLine();
-                Log.i("aaa", "a3");
-                Log.i("aaa", "line : " + line);
-
+        //insertDB.php에 보낼 파일전송요청 객체 생성
+        SimpleMultiPartRequest multiPartRequest = new SimpleMultiPartRequest(Request.Method.POST, serverUrl_Spot, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.i("aaa", "a1");
+                //insertDB.php의 echo 결과 보여주기
+                new AlertDialog.Builder(getActivity()).setMessage(response).setPositiveButton("ok", null).create().show();
 
                 //읽어온 데이터 문자열에서 db의 row(레코드)별로 배열로 분리하기
-                String[] rows = line.split(";");
+                String[] rows = response.split(";");
 
                 spotItems.clear();
-                Log.i("aaa", "a4 : " + rows.length);
-                for(String row : rows){
-                    String[] datas = row.split("&");
+                Log.i("spot", "a2 : " + rows.length);
+                Log.i("spot", "response : " + response);
 
-                    for (int i = 0; i < datas.length; i++) Log.i("aaa2", i + " : " + datas[i]);
-                    if(datas.length != 5) continue;
-                    Log.i("aaa", "a5");
+                for(String row : rows) {
+                    datas = row.split("&");
+
+                    //배열 내용 확인
+                    for (int i = 0; i < datas.length; i++) Log.i("spot", i + " : " + datas[i]);
                     no = Integer.parseInt(datas[0]);
                     name = datas[1];
                     msg = datas[2];
-                    aviPath = "http://thyun85.dothome.co.kr/dailyboard/"+datas[3];
+                    imgPath = "http://thyun85.dothome.co.kr/dailyboard/"+datas[3];
                     date = datas[4];
+                    favoriteNo = datas[5];
+                    likeNo = datas[6];
 
-                    spotItems.add(0, new SpotItem(no, name, msg, aviPath, date));
+                    spotItems.add(0, new SpotItem(no, name, msg, imgPath, date));
+                    adapterSpot.notifyDataSetChanged();
+                    refreshLayout.setRefreshing(false);
+                    Log.i("aaa", "a3");
+                    Log.i("aaa1", email);
 
-                    publishProgress();
-                    Log.i("aaa", "a6");
+//                    if(datas.length == 5){
+//                        no = Integer.parseInt(datas[0]);
+//                        name = datas[1];
+//                        msg = datas[2];
+//                        imgPath = "http://thyun85.dothome.co.kr/dailyboard/"+datas[3];
+//                        date = datas[4];
+//
+//                        spotItems.add(0, new SpotItem(no, name, msg, imgPath, date));
+//
+//                        adapterSpot.notifyDataSetChanged();
+//                        refreshLayout.setRefreshing(false);
+//                        Log.i("aaa", "a3");
+//                        Log.i("aaa1", email);
+//                    }else if(datas.length == 6){
+//                        no = Integer.parseInt(datas[0]);
+//                        name = datas[1];
+//                        msg = datas[2];
+//                        imgPath = "http://thyun85.dothome.co.kr/dailyboard/"+datas[3];
+//                        date = datas[4];
+//                        reviewNo = datas[5];
+//
+//                        spotItems.add(0, new SpotItem(no, name, msg, imgPath, date, true));
+//
+//                        adapterSpot.notifyDataSetChanged();
+//                        refreshLayout.setRefreshing(false);
+//                        Log.i("aaa", "a4");
+//                        Log.i("aaa2", email);
+//                    }
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
             }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+//                Toast.makeText(LoginActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
 
-            return "읽기 완료";
-        }
+        //요청객체에 데이터 추가하기
+//        multiPartRequest.addStringParam("status", status);
+        multiPartRequest.addStringParam("email", email);
 
-        protected void onProgressUpdate(Void... values) {
-            super.onProgressUpdate(values);
+        //요청큐 객체 생성하기
+        RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
 
-            //리사이클러뷰의 갱신요청..
-            adapterSpot.notifyDataSetChanged();
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-
-            //swipeRefresh 로딩아이콘 지우기
-            refreshLayout.setRefreshing(false);
-        }
+        //요청큐에 요청객체 추가
+        requestQueue.add(multiPartRequest);
     }
 }

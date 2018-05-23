@@ -35,9 +35,9 @@ public class PostReviewActivity extends AppCompatActivity {
     ImageView iv;
     TextView tvName;
     EditText editMsg;
-    String imgPath;
 
     String name, msg, type, email;
+    String imgPath;
 
     Spinner spinner;
     ArrayAdapter adapter;
@@ -148,7 +148,7 @@ public class PostReviewActivity extends AppCompatActivity {
             @Override
             public void onResponse(String response) {
                 //insertpostDB.php의 echo 결과 보여주기
-//                new AlertDialog.Builder(PostActivity.this).setMessage(response).setPositiveButton("OK", null).create().show();
+//                new AlertDialog.Builder(PostTipsActivity.this).setMessage(response).setPositiveButton("OK", null).create().show();
             }
         }, new Response.ErrorListener() {
             @Override

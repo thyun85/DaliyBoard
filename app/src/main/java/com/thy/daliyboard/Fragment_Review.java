@@ -59,13 +59,11 @@ public class Fragment_Review extends Fragment {
     int no;
     String name, msg, imgPath, type, date;
     String tag = "Lb";
-    String serverUrl;
+    String serverUrl_Review;
 
     String status, email;
 
     String reviewNo = null;
-
-    ToggleButton tbFavorite;
 
     String[] datas;
 
@@ -75,9 +73,7 @@ public class Fragment_Review extends Fragment {
 
         final View view = inflater.inflate(R.layout.review, container, false);
 
-        tbFavorite = view.findViewById(R.id.tb_favorite);
         tabHost = view.findViewById(android.R.id.tabhost);
-
         tabHost.setup();
 
         tabHost.addTab(tabHost.newTabSpec("Lb").setIndicator("LB").setContent(R.id.tablb));
@@ -200,8 +196,6 @@ public class Fragment_Review extends Fragment {
         return view;
     }
 
-
-
     View.OnClickListener clickFab = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -211,12 +205,13 @@ public class Fragment_Review extends Fragment {
     };
 
     public void loadDB(){
-        serverUrl = "http://thyun85.dothome.co.kr/dailyboard/loadReviewDB.php";
+        serverUrl_Review = "http://thyun85.dothome.co.kr/dailyboard/loadReviewDB.php";
 
         //insertDB.php에 보낼 파일전송요청 객체 생성
-        SimpleMultiPartRequest multiPartRequest = new SimpleMultiPartRequest(Request.Method.POST, serverUrl, new Response.Listener<String>() {
+        SimpleMultiPartRequest multiPartRequest = new SimpleMultiPartRequest(Request.Method.POST, serverUrl_Review, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+                Log.i("aaa", "a1");
                 //insertDB.php의 echo 결과 보여주기
                 new AlertDialog.Builder(getActivity()).setMessage(response).setPositiveButton("ok", null).create().show();
 
@@ -224,14 +219,14 @@ public class Fragment_Review extends Fragment {
                 String[] rows = response.split(";");
 
                 reviewItems.clear();
-                Log.i("aaa", "a4 : " + rows.length);
+                Log.i("aaa", "a2 : " + rows.length);
                 Log.i("aaa", "response : " + response);
 
                 for(String row : rows) {
                     datas = row.split("&");
 
                     //배열 내용 확인
-                    for (int i = 0; i < datas.length; i++) Log.i("aaa2", i + " : " + datas[i]);
+                    for (int i = 0; i < datas.length; i++) Log.i("aaa", i + " : " + datas[i]);
 
                     if(datas.length == 5){
                         no = Integer.parseInt(datas[0]);
@@ -244,7 +239,8 @@ public class Fragment_Review extends Fragment {
 
                         adapterReview.notifyDataSetChanged();
                         refreshLayout.setRefreshing(false);
-                        Log.i("aaa", "a6");
+                        Log.i("aaa", "a3");
+                        Log.i("aaa1", email);
                     }else if(datas.length == 6){
                         no = Integer.parseInt(datas[0]);
                         name = datas[1];
@@ -252,11 +248,13 @@ public class Fragment_Review extends Fragment {
                         imgPath = "http://thyun85.dothome.co.kr/dailyboard/"+datas[3];
                         date = datas[4];
                         reviewNo = datas[5];
-                        reviewItems.add(0, new ReviewItem(no, name, msg, imgPath, date));
+
+                        reviewItems.add(0, new ReviewItem(no, name, msg, imgPath, date, true));
 
                         adapterReview.notifyDataSetChanged();
                         refreshLayout.setRefreshing(false);
-                        Log.i("aaa", "a6");
+                        Log.i("aaa", "a4");
+                        Log.i("aaa2", email);
                     }
                 }
 

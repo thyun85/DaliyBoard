@@ -9,6 +9,7 @@ public class ReviewItem {
 //    String type;
     String upDate;
     boolean isFavorite = false;
+    boolean isLike = false;
 
     public ReviewItem(int no, String nickName, String msg, String imgPath, String upDate) {
         this.no = no;
@@ -18,14 +19,24 @@ public class ReviewItem {
         this.upDate = upDate;
     }
 
-//    public ReviewItem(int no, String nickName, String msg, String imgPath, String type, String upDate) {
-//        this.no = no;
-//        this.nickName = nickName;
-//        this.msg = msg;
-//        this.imgPath = imgPath;
-//        this.type = type;
-//        this.upDate = upDate;
-//    }
+    public ReviewItem(int no, String nickName, String msg, String imgPath, String upDate, boolean isFavorite) {
+        this.no = no;
+        this.nickName = nickName;
+        this.msg = msg;
+        this.imgPath = imgPath;
+        this.upDate = upDate;
+        this.isFavorite = isFavorite;
+    }
+
+    public ReviewItem(int no, String nickName, String msg, String imgPath, String upDate, boolean isFavorite, boolean isLike) {
+        this.no = no;
+        this.nickName = nickName;
+        this.msg = msg;
+        this.imgPath = imgPath;
+        this.upDate = upDate;
+        this.isFavorite = isFavorite;
+        this.isLike = isLike;
+    }
 
     public int getNo() {
         return no;
@@ -67,19 +78,19 @@ public class ReviewItem {
         this.upDate = upDate;
     }
 
-//    public String getType() {
-//        return type;
-//    }
-//
-//    public void setType(String type) {
-//        this.type = type;
-//    }
-
     public boolean isFavorite() {
         return isFavorite;
     }
 
     public void setFavorite(boolean favorite) {
         isFavorite = favorite;
+    }
+
+    public boolean isLike() {
+        return isLike;
+    }
+
+    public void setLike(boolean like) {
+        isLike = like;
     }
 }

@@ -7,6 +7,8 @@ public class SpotItem {
     String msg;
     String imgPath;
     String upDate;
+    boolean isFavorite = false;
+    boolean isLike = false;
 
     public SpotItem(int no, String nickName, String msg, String imgPath, String upDate) {
         this.no = no;
@@ -14,6 +16,25 @@ public class SpotItem {
         this.msg = msg;
         this.imgPath = imgPath;
         this.upDate = upDate;
+    }
+
+    public SpotItem(int no, String nickName, String msg, String imgPath, String upDate, boolean isFavorite) {
+        this.no = no;
+        this.nickName = nickName;
+        this.msg = msg;
+        this.imgPath = imgPath;
+        this.upDate = upDate;
+        this.isFavorite = isFavorite;
+    }
+
+    public SpotItem(int no, String nickName, String msg, String imgPath, String upDate, boolean isFavorite, boolean isLike) {
+        this.no = no;
+        this.nickName = nickName;
+        this.msg = msg;
+        this.imgPath = imgPath;
+        this.upDate = upDate;
+        this.isFavorite = isFavorite;
+        this.isLike = isLike;
     }
 
     public int getNo() {
@@ -54,5 +75,21 @@ public class SpotItem {
 
     public void setUpDate(String upDate) {
         this.upDate = upDate;
+    }
+
+    public boolean isFavorite() {
+        return isFavorite;
+    }
+
+    public void setFavorite(boolean favorite) {
+        isFavorite = favorite;
+    }
+
+    public boolean isLike() {
+        return isLike;
+    }
+
+    public void setLike(boolean like) {
+        isLike = like;
     }
 }

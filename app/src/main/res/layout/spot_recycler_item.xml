@@ -36,7 +36,7 @@
             android:layout_marginTop="16dp"/>
 
         <ToggleButton
-            android:id="@+id/tb_favorite"
+            android:id="@+id/tb_spot_favorite"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:background="@drawable/tb_favorite"
@@ -56,11 +56,48 @@
             android:src="@drawable/img11"
             android:adjustViewBounds="true"/>
 
+        <ToggleButton
+            android:id="@+id/tb_spot_like"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:background="@drawable/tb_like"
+            android:textOn=""
+            android:textOff=""
+            android:layout_below="@id/iv_image"
+            android:layout_marginRight="4dp"/>
+
+        <ImageView
+            android:id="@+id/iv_reply"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:src="@drawable/ic_reply"
+            android:layout_below="@id/iv_image"
+            android:layout_toRightOf="@id/tb_spot_like"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="좋아요"
+            android:layout_below="@id/iv_image"
+            android:layout_toLeftOf="@id/likecount"
+            android:layout_marginTop="4dp"
+            android:layout_marginRight="4dp"/>
+
+        <TextView
+            android:id="@+id/likecount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="00"
+            android:layout_below="@id/iv_image"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="4dp"
+            android:layout_marginRight="6dp"/>
+
         <TextView
             android:id="@+id/tv_message"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/iv_image"
+            android:layout_below="@id/tb_spot_like"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             android:layout_marginRight="16dp"
