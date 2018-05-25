@@ -2,6 +2,7 @@ package com.thy.daliyboard;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -32,6 +33,7 @@ public class Adapter_Review extends RecyclerView.Adapter {
     boolean isEditable;
 
     String id, msg, email;
+    int no;
 
     public Adapter_Review(Context context, ArrayList<ReviewItem> reviewItems) {
         this.context = context;
@@ -63,7 +65,8 @@ public class Adapter_Review extends RecyclerView.Adapter {
         vh.tvTimes.setText(reviewItem.upDate);
 
         vh.reviewFavorite.setChecked(reviewItem.isFavorite);
-
+        vh.reviewLike.setChecked(reviewItem.isLike);
+        vh.tvLikeCount.setText(reviewItem.likeCnt + "");
 
         Glide.with(context).load(reviewItem.getImgPath()).into(vh.imageView);
 
@@ -78,8 +81,8 @@ public class Adapter_Review extends RecyclerView.Adapter {
     class VH extends RecyclerView.ViewHolder{
 
         CircleImageView ivIcon;
-        TextView tvTitle, tvMessage, tvTimes;
-        ImageView imageView;
+        TextView tvTitle, tvMessage, tvTimes, tvLikeCount;
+        ImageView imageView, reply;;
         ToggleButton reviewFavorite, reviewLike;
 
         public VH(View itemView) {
@@ -92,9 +95,13 @@ public class Adapter_Review extends RecyclerView.Adapter {
             imageView = itemView.findViewById(R.id.iv_image);
             reviewFavorite = itemView.findViewById(R.id.tb_review_favorite);
             reviewFavorite.setOnCheckedChangeListener(checkedChangeListener);
+            tvLikeCount = itemView.findViewById(R.id.likecount);
 
             reviewLike = itemView.findViewById(R.id.tb_review_like);
             reviewLike.setOnCheckedChangeListener(checkedChangeListener);
+
+            reply = itemView.findViewById(R.id.review_reply);
+            reply.setOnClickListener(clickReply);
 //            tbFavorite.setOnClickListener(new View.OnClickListener() {
 //                @Override
 //                public void onClick(View view) {
@@ -117,6 +124,21 @@ public class Adapter_Review extends RecyclerView.Adapter {
 //            });
         }
 
+        View.OnClickListener clickReply = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String itemNo = reviewItems.get(getLayoutPosition()).getNo()+"";
+                String itemMsg = reviewItems.get(getLayoutPosition()).getMsg();
+                String itemDate = reviewItems.get(getLayoutPosition()).getUpDate();
+                Intent intent = new Intent(context, ReplyActivity.class);
+                intent.putExtra("itemNo", itemNo);
+                intent.putExtra("itemMsg", itemMsg);
+                intent.putExtra("itemDate", itemDate);
+                intent.putExtra("type", "review");
+                context.startActivity(intent);
+            }
+        };
+
         CompoundButton.OnCheckedChangeListener checkedChangeListener = new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
@@ -126,7 +148,7 @@ public class Adapter_Review extends RecyclerView.Adapter {
                             reviewItems.get(getLayoutPosition()).isFavorite = checked;
                             SharedPreferences pref = context.getSharedPreferences("facebookLoginData", context.MODE_PRIVATE);
                             email = pref.getString("Email", "no email");
-                            msg = reviewItems.get(getLayoutPosition()).getMsg();
+                            no = reviewItems.get(getLayoutPosition()).getNo();
                             Log.i("checked", checked+"");
                             if(checked) uploadFavoriteDB();
                             else deleteFavoriteDB();
@@ -137,10 +159,20 @@ public class Adapter_Review extends RecyclerView.Adapter {
                             reviewItems.get(getLayoutPosition()).isLike = checked;
                             SharedPreferences pref = context.getSharedPreferences("facebookLoginData", context.MODE_PRIVATE);
                             email = pref.getString("Email", "no email");
-                            msg = reviewItems.get(getLayoutPosition()).getMsg();
+                            no = reviewItems.get(getLayoutPosition()).getNo();
                             Log.i("checked", checked+"");
                             if(checked) uploadLikeDB();
                             else deleteLikeDB();
+
+                            ReviewItem item = reviewItems.get(getLayoutPosition());
+                            int likeCount = reviewItems.get(getLayoutPosition()).likeCnt;
+                            if (item.isLike) {
+                                item.likeCnt = ++likeCount;
+                            }
+                            else {
+                                item.likeCnt = --likeCount;
+                            }
+                            tvLikeCount.setText(likeCount + "");
                         }
                         break;
                 }
@@ -148,7 +180,7 @@ public class Adapter_Review extends RecyclerView.Adapter {
         };
 
         public void deleteLikeDB(){
-            String serverUrl = "http://thyun85.dothome.co.kr/dailyboard/deleteReviewDB.php";
+            String serverUrl = "http://thyun85.dothome.co.kr/dailyboard/deleteLikeReviewDB.php";
             Log.i("aaa", serverUrl);
             //insertpostDB.php에 보낼 파일전송요청 객체 생성
             SimpleMultiPartRequest multiPartRequest = new SimpleMultiPartRequest(Request.Method.POST, serverUrl, new Response.Listener<String>() {
@@ -165,7 +197,7 @@ public class Adapter_Review extends RecyclerView.Adapter {
 
             //요청객체에 데이터 추가하기
             multiPartRequest.addStringParam("email", email);
-            multiPartRequest.addStringParam("msg", msg);
+            multiPartRequest.addStringParam("no", no + "");
 
             //요청큐 객체 생성하기
             RequestQueue requestQueue = Volley.newRequestQueue(context);
@@ -192,7 +224,7 @@ public class Adapter_Review extends RecyclerView.Adapter {
 
             //요청객체에 데이터 추가하기
             multiPartRequest.addStringParam("email", email);
-            multiPartRequest.addStringParam("msg", msg);
+            multiPartRequest.addStringParam("no", no + "");
 
             //요청큐 객체 생성하기
             RequestQueue requestQueue = Volley.newRequestQueue(context);
@@ -219,7 +251,7 @@ public class Adapter_Review extends RecyclerView.Adapter {
 
             //요청객체에 데이터 추가하기
             multiPartRequest.addStringParam("email", email);
-            multiPartRequest.addStringParam("msg", msg);
+            multiPartRequest.addStringParam("no", no + "");
 
             //요청큐 객체 생성하기
             RequestQueue requestQueue = Volley.newRequestQueue(context);
@@ -246,7 +278,7 @@ public class Adapter_Review extends RecyclerView.Adapter {
 
             //요청객체에 데이터 추가하기
             multiPartRequest.addStringParam("email", email);
-            multiPartRequest.addStringParam("msg", msg);
+            multiPartRequest.addStringParam("no", no + "");
 
             //요청큐 객체 생성하기
             RequestQueue requestQueue = Volley.newRequestQueue(context);

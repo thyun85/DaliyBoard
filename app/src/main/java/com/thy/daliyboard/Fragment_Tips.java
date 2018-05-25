@@ -43,10 +43,10 @@ public class Fragment_Tips extends Fragment {
     VideoView videoView;
 
     int no;
-    String name, msg, aviPath, date;
-
-    String status, email;
-    String reviewNo = null;
+    String num, name, msg, aviPath, date;
+    String email;
+    String favorite, like;
+    int likeCnt;
 
     SharedPreferences pref;
 
@@ -65,6 +65,7 @@ public class Fragment_Tips extends Fragment {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         recyclerViewTip.setLayoutManager(layoutManager);
 
+        tipsItems.clear();
         loadDB();
 
         refreshLayout = view.findViewById(R.id.layout_swipe);
@@ -128,46 +129,47 @@ public class Fragment_Tips extends Fragment {
                 //insertDB.php의 echo 결과 보여주기
                 new AlertDialog.Builder(getActivity()).setMessage(response).setPositiveButton("ok", null).create().show();
 
-                //읽어온 데이터 문자열에서 db의 row(레코드)별로 배열로 분리하기
-                String[] rows = response.split(";");
+                if(response.equals("")){
+                    new AlertDialog.Builder(getActivity()).setMessage("내용없음").setPositiveButton("ok", null).create().show();
+                }else{
+                    //읽어온 데이터 문자열에서 db의 row(레코드)별로 배열로 분리하기
+                    String[] rows = response.split(";");
 
-                tipsItems.clear();
-                Log.i("aaa", "a2 : " + rows.length);
-                Log.i("aaa", "response : " + response);
+                    tipsItems.clear();
+                    Log.i("aaa", "a2 : " + rows.length);
+                    Log.i("aaa", "response : " + response);
 
-                for(String row : rows) {
-                    datas = row.split("&");
+                    for(String row : rows) {
+                        datas = row.split("&");
+                        Log.i("datas.length", datas.length + "");
+                        //배열 내용 확인
+                        for (int i = 0; i < datas.length; i++)
+                            Log.i("tips", "datas[" + i + "]" + " : " + datas[i]);
 
-                    //배열 내용 확인
-                    for (int i = 0; i < datas.length; i++) Log.i("aaa", i + " : " + datas[i]);
-
-                    if(datas.length == 5){
                         no = Integer.parseInt(datas[0]);
+                        num = datas[0];
                         name = datas[1];
                         msg = datas[2];
-                        aviPath = "http://thyun85.dothome.co.kr/dailyboard/"+datas[3];
+                        aviPath = "http://thyun85.dothome.co.kr/dailyboard/" + datas[3];
                         date = datas[4];
+                        like = datas[5];
+                        favorite = datas[6];
+                        likeCnt = Integer.parseInt(datas[7]);
 
-                        tipsItems.add(0, new TipsItem(no, name, msg, aviPath, date));
+                        boolean favoriteNo = false;
+                        boolean likeNo = false;
+                        if (like.equals(num)) likeNo = true;
+                        if (favorite.equals(num)) favoriteNo = true;
+
+                        Log.i("favoriteNo", favoriteNo + "");
+                        Log.i("likeNo", likeNo + "");
+
+                        tipsItems.add(0, new TipsItem(no, name, msg, aviPath, date, likeNo, favoriteNo, likeCnt));
 
                         adapterTips.notifyDataSetChanged();
                         refreshLayout.setRefreshing(false);
                         Log.i("aaa", "a3");
                         Log.i("aaa1", email);
-                    }else if(datas.length == 6){
-                        no = Integer.parseInt(datas[0]);
-                        name = datas[1];
-                        msg = datas[2];
-                        aviPath = "http://thyun85.dothome.co.kr/dailyboard/"+datas[3];
-                        date = datas[4];
-                        reviewNo = datas[5];
-
-                        tipsItems.add(0, new TipsItem(no, name, msg, aviPath, date, true));
-
-                        adapterTips.notifyDataSetChanged();
-                        refreshLayout.setRefreshing(false);
-                        Log.i("aaa", "a4");
-                        Log.i("aaa2", email);
                     }
                 }
             }

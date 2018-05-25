@@ -6,36 +6,20 @@ public class ReviewItem {
     String nickName;
     String msg;
     String imgPath;
-//    String type;
     String upDate;
-    boolean isFavorite = false;
+    int likeCnt;
     boolean isLike = false;
+    boolean isFavorite = false;
 
-    public ReviewItem(int no, String nickName, String msg, String imgPath, String upDate) {
+    public ReviewItem(int no, String nickName, String msg, String imgPath, String upDate, boolean isLike, boolean isFavorite, int likeCnt) {
         this.no = no;
         this.nickName = nickName;
         this.msg = msg;
         this.imgPath = imgPath;
         this.upDate = upDate;
-    }
-
-    public ReviewItem(int no, String nickName, String msg, String imgPath, String upDate, boolean isFavorite) {
-        this.no = no;
-        this.nickName = nickName;
-        this.msg = msg;
-        this.imgPath = imgPath;
-        this.upDate = upDate;
-        this.isFavorite = isFavorite;
-    }
-
-    public ReviewItem(int no, String nickName, String msg, String imgPath, String upDate, boolean isFavorite, boolean isLike) {
-        this.no = no;
-        this.nickName = nickName;
-        this.msg = msg;
-        this.imgPath = imgPath;
-        this.upDate = upDate;
-        this.isFavorite = isFavorite;
         this.isLike = isLike;
+        this.isFavorite = isFavorite;
+        this.likeCnt = likeCnt;
     }
 
     public int getNo() {
@@ -92,5 +76,13 @@ public class ReviewItem {
 
     public void setLike(boolean like) {
         isLike = like;
+    }
+
+    public int getLikeCnt() {
+        return likeCnt;
+    }
+
+    public void setLikeCnt(int likeCnt) {
+        this.likeCnt = likeCnt;
     }
 }

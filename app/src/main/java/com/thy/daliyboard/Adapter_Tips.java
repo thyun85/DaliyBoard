@@ -1,6 +1,7 @@
 package com.thy.daliyboard;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.support.v7.app.AlertDialog;
@@ -35,6 +36,7 @@ public class Adapter_Tips extends RecyclerView.Adapter {
     boolean isEditable;
 
     String id, msg, email;
+    int no;
 
     public Adapter_Tips(Context context, ArrayList<TipsItem> tipsItems) {
         this.context = context;
@@ -66,6 +68,7 @@ public class Adapter_Tips extends RecyclerView.Adapter {
         vh.tvTimes.setText(tipsItem.upDate);
         vh.tipsFavorite.setChecked(tipsItem.isFavorite);
         vh.tipsLike.setChecked(tipsItem.isLike);
+        vh.tvLikeCount.setText(tipsItem.likeCnt + "");
 
         MediaController mediaController = new MediaController(context);
         mediaController.setAnchorView(vh.videoView);
@@ -86,8 +89,8 @@ public class Adapter_Tips extends RecyclerView.Adapter {
     class VH extends RecyclerView.ViewHolder{
 
         CircleImageView ivIcon;
-        TextView tvTitle, tvMessage, tvTimes;
-        VideoView videoView;
+        TextView tvTitle, tvMessage, tvTimes, tvLikeCount;
+        VideoView videoView, reply;;
         ToggleButton tipsFavorite, tipsLike;
 
         public VH(View itemView) {
@@ -102,7 +105,26 @@ public class Adapter_Tips extends RecyclerView.Adapter {
             tipsLike = itemView.findViewById(R.id.tb_tips_like);
             tipsFavorite.setOnCheckedChangeListener(checkedChangeListener);
             tipsLike.setOnCheckedChangeListener(checkedChangeListener);
+            tvLikeCount = itemView.findViewById(R.id.likecount);
+
+            reply = itemView.findViewById(R.id.tips_reply);
+            reply.setOnClickListener(clickReply);
         }
+
+        View.OnClickListener clickReply = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String itemNo = tipsItems.get(getLayoutPosition()).getNo()+"";
+                String itemMsg = tipsItems.get(getLayoutPosition()).getMsg();
+                String itemDate = tipsItems.get(getLayoutPosition()).getUpDate();
+                Intent intent = new Intent(context, ReplyActivity.class);
+                intent.putExtra("itemNo", itemNo);
+                intent.putExtra("itemMsg", itemMsg);
+                intent.putExtra("itemDate", itemDate);
+                intent.putExtra("type", "tips");
+                context.startActivity(intent);
+            }
+        };
 
         CompoundButton.OnCheckedChangeListener checkedChangeListener = new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -113,7 +135,7 @@ public class Adapter_Tips extends RecyclerView.Adapter {
                             tipsItems.get(getLayoutPosition()).isFavorite = checked;
                             SharedPreferences pref = context.getSharedPreferences("facebookLoginData", context.MODE_PRIVATE);
                             email = pref.getString("Email", "no email");
-                            msg = tipsItems.get(getLayoutPosition()).getMsg();
+                            no = tipsItems.get(getLayoutPosition()).getNo();
                             Log.i("checked", checked+"");
                             if(checked) uploadFavoriteDB();
                             else deleteFavoriteDB();
@@ -124,10 +146,20 @@ public class Adapter_Tips extends RecyclerView.Adapter {
                             tipsItems.get(getLayoutPosition()).isLike = checked;
                             SharedPreferences pref = context.getSharedPreferences("facebookLoginData", context.MODE_PRIVATE);
                             email = pref.getString("Email", "no email");
-                            msg = tipsItems.get(getLayoutPosition()).getMsg();
+                            no = tipsItems.get(getLayoutPosition()).getNo();
                             Log.i("checked", checked+"");
                             if(checked) uploadLikeDB();
                             else deleteLikeDB();
+
+                            TipsItem item = tipsItems.get(getLayoutPosition());
+                            int likeCount = tipsItems.get(getLayoutPosition()).likeCnt;
+                            if (item.isLike) {
+                                item.likeCnt = ++likeCount;
+                            }
+                            else {
+                                item.likeCnt = --likeCount;
+                            }
+                            tvLikeCount.setText(likeCount + "");
                         }
                         break;
                 }
@@ -152,7 +184,7 @@ public class Adapter_Tips extends RecyclerView.Adapter {
 
             //요청객체에 데이터 추가하기
             multiPartRequest.addStringParam("email", email);
-            multiPartRequest.addStringParam("msg", msg);
+            multiPartRequest.addStringParam("no", no + "");
 
             //요청큐 객체 생성하기
             RequestQueue requestQueue = Volley.newRequestQueue(context);
@@ -179,7 +211,7 @@ public class Adapter_Tips extends RecyclerView.Adapter {
 
             //요청객체에 데이터 추가하기
             multiPartRequest.addStringParam("email", email);
-            multiPartRequest.addStringParam("msg", msg);
+            multiPartRequest.addStringParam("no", no + "");
 
             //요청큐 객체 생성하기
             RequestQueue requestQueue = Volley.newRequestQueue(context);
@@ -206,7 +238,7 @@ public class Adapter_Tips extends RecyclerView.Adapter {
 
             //요청객체에 데이터 추가하기
             multiPartRequest.addStringParam("email", email);
-            multiPartRequest.addStringParam("msg", msg);
+            multiPartRequest.addStringParam("no", no + "");
 
             //요청큐 객체 생성하기
             RequestQueue requestQueue = Volley.newRequestQueue(context);
@@ -233,7 +265,7 @@ public class Adapter_Tips extends RecyclerView.Adapter {
 
             //요청객체에 데이터 추가하기
             multiPartRequest.addStringParam("email", email);
-            multiPartRequest.addStringParam("msg", msg);
+            multiPartRequest.addStringParam("no", no + "");
 
             //요청큐 객체 생성하기
             RequestQueue requestQueue = Volley.newRequestQueue(context);

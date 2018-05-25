@@ -67,12 +67,13 @@
             android:layout_marginRight="4dp"/>
 
         <ImageView
-            android:id="@+id/iv_reply"
+            android:id="@+id/spot_reply"
             android:layout_width="36dp"
             android:layout_height="36dp"
             android:src="@drawable/ic_reply"
             android:layout_below="@id/iv_image"
-            android:layout_toRightOf="@id/tb_spot_like"/>
+            android:layout_toRightOf="@id/tb_spot_like"
+            android:clickable="true"/>
 
         <TextView
             android:layout_width="wrap_content"

@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 import android.widget.VideoView;
@@ -51,14 +52,15 @@ public class Fragment_Spot extends Fragment {
     FloatingActionButton actionButton;
 
     int no;
-    String name, msg, imgPath, date;
+    String num, name, msg, imgPath, date;
     String email;
     String serverUrl_Spot;
-
-    String favoriteNo = null;
-    String likeNo = null;
+    String favorite, like;
+    int likeCnt;
 
     String[] datas;
+
+    ImageView reply;
 
     @Nullable
     @Override
@@ -73,6 +75,7 @@ public class Fragment_Spot extends Fragment {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         recyclerViewSpot.setLayoutManager(layoutManager);
 
+        spotItems.clear();
         loadDB();
 
         refreshLayout = view.findViewById(R.id.layout_swipe);
@@ -106,7 +109,7 @@ public class Fragment_Spot extends Fragment {
         return view;
     }
 
-    private  void loadDB(){
+    private void loadDB(){
         serverUrl_Spot = "http://thyun85.dothome.co.kr/dailyboard/loadSpotDB.php";
 
         //insertDB.php에 보낼 파일전송요청 객체 생성
@@ -117,60 +120,48 @@ public class Fragment_Spot extends Fragment {
                 //insertDB.php의 echo 결과 보여주기
                 new AlertDialog.Builder(getActivity()).setMessage(response).setPositiveButton("ok", null).create().show();
 
-                //읽어온 데이터 문자열에서 db의 row(레코드)별로 배열로 분리하기
-                String[] rows = response.split(";");
+                if(response.equals("")){
+                    new AlertDialog.Builder(getActivity()).setMessage("내용없음").setPositiveButton("ok", null).create().show();
+                }else{
+                    //읽어온 데이터 문자열에서 db의 row(레코드)별로 배열로 분리하기
+                    String[] rows = response.split(";");
 
-                spotItems.clear();
-                Log.i("spot", "a2 : " + rows.length);
-                Log.i("spot", "response : " + response);
+                    spotItems.clear();
+                    Log.i("spot", "a2 : " + rows.length);
+                    Log.i("spot", "response : " + response);
 
-                for(String row : rows) {
-                    datas = row.split("&");
+                    for(String row : rows) {
+                        datas = row.split("&");
+                        Log.i("datas.length", datas.length + "");
+                        //배열 내용 확인
+                        for (int i = 0; i < datas.length; i++)
+                            Log.i("spot", "datas[" + i + "]" + " : " + datas[i]);
 
-                    //배열 내용 확인
-                    for (int i = 0; i < datas.length; i++) Log.i("spot", i + " : " + datas[i]);
-                    no = Integer.parseInt(datas[0]);
-                    name = datas[1];
-                    msg = datas[2];
-                    imgPath = "http://thyun85.dothome.co.kr/dailyboard/"+datas[3];
-                    date = datas[4];
-                    favoriteNo = datas[5];
-                    likeNo = datas[6];
+                        no = Integer.parseInt(datas[0]);
+                        num = datas[0];
+                        name = datas[1];
+                        msg = datas[2];
+                        imgPath = "http://thyun85.dothome.co.kr/dailyboard/" + datas[3];
+                        date = datas[4];
+                        like = datas[5];
+                        favorite = datas[6];
+                        likeCnt = Integer.parseInt(datas[7]);
 
-                    spotItems.add(0, new SpotItem(no, name, msg, imgPath, date));
-                    adapterSpot.notifyDataSetChanged();
-                    refreshLayout.setRefreshing(false);
-                    Log.i("aaa", "a3");
-                    Log.i("aaa1", email);
+                        boolean favoriteNo = false;
+                        boolean likeNo = false;
+                        if (like.equals(num)) likeNo = true;
+                        if (favorite.equals(num)) favoriteNo = true;
 
-//                    if(datas.length == 5){
-//                        no = Integer.parseInt(datas[0]);
-//                        name = datas[1];
-//                        msg = datas[2];
-//                        imgPath = "http://thyun85.dothome.co.kr/dailyboard/"+datas[3];
-//                        date = datas[4];
-//
-//                        spotItems.add(0, new SpotItem(no, name, msg, imgPath, date));
-//
-//                        adapterSpot.notifyDataSetChanged();
-//                        refreshLayout.setRefreshing(false);
-//                        Log.i("aaa", "a3");
-//                        Log.i("aaa1", email);
-//                    }else if(datas.length == 6){
-//                        no = Integer.parseInt(datas[0]);
-//                        name = datas[1];
-//                        msg = datas[2];
-//                        imgPath = "http://thyun85.dothome.co.kr/dailyboard/"+datas[3];
-//                        date = datas[4];
-//                        reviewNo = datas[5];
-//
-//                        spotItems.add(0, new SpotItem(no, name, msg, imgPath, date, true));
-//
-//                        adapterSpot.notifyDataSetChanged();
-//                        refreshLayout.setRefreshing(false);
-//                        Log.i("aaa", "a4");
-//                        Log.i("aaa2", email);
-//                    }
+                        Log.i("favoriteNo", favoriteNo + "");
+                        Log.i("likeNo", likeNo + "");
+
+                        spotItems.add(0, new SpotItem(no, name, msg, imgPath, date, likeNo, favoriteNo, likeCnt));
+
+                        adapterSpot.notifyDataSetChanged();
+                        refreshLayout.setRefreshing(false);
+                        Log.i("aaa", "a3");
+                        Log.i("aaa1", email);
+                    }
                 }
             }
         }, new Response.ErrorListener() {
@@ -180,8 +171,8 @@ public class Fragment_Spot extends Fragment {
             }
         });
 
+
         //요청객체에 데이터 추가하기
-//        multiPartRequest.addStringParam("status", status);
         multiPartRequest.addStringParam("email", email);
 
         //요청큐 객체 생성하기

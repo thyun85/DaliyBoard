@@ -57,13 +57,12 @@ public class Fragment_Review extends Fragment {
 //    LoadLikeDBTask likeDBTask;
 
     int no;
-    String name, msg, imgPath, type, date;
+    String num, name, msg, imgPath, type, date;
     String tag = "Lb";
     String serverUrl_Review;
-
     String status, email;
-
-    String reviewNo = null;
+    String favorite, like;
+    int likeCnt;
 
     String[] datas;
 
@@ -215,46 +214,48 @@ public class Fragment_Review extends Fragment {
                 //insertDB.php의 echo 결과 보여주기
                 new AlertDialog.Builder(getActivity()).setMessage(response).setPositiveButton("ok", null).create().show();
 
-                //읽어온 데이터 문자열에서 db의 row(레코드)별로 배열로 분리하기
-                String[] rows = response.split(";");
+                if(response.equals("")){
+                    new android.app.AlertDialog.Builder(getActivity()).setMessage("내용없음").setPositiveButton("ok", null).create().show();
+                }else{
+                    //읽어온 데이터 문자열에서 db의 row(레코드)별로 배열로 분리하기
+                    String[] rows = response.split(";");
 
-                reviewItems.clear();
-                Log.i("aaa", "a2 : " + rows.length);
-                Log.i("aaa", "response : " + response);
+                    reviewItems.clear();
+                    Log.i("aaa", "a2 : " + rows.length);
+                    Log.i("aaa", "response : " + response);
 
-                for(String row : rows) {
-                    datas = row.split("&");
+                    for(String row : rows) {
+                        datas = row.split("&");
 
-                    //배열 내용 확인
-                    for (int i = 0; i < datas.length; i++) Log.i("aaa", i + " : " + datas[i]);
+                        Log.i("datas.length", datas.length+"");
+                        //배열 내용 확인
+                        for (int i = 0; i < datas.length; i++) Log.i("review", "datas["+i+"]" + " : " + datas[i]);
 
-                    if(datas.length == 5){
                         no = Integer.parseInt(datas[0]);
+                        num = datas[0];
                         name = datas[1];
                         msg = datas[2];
                         imgPath = "http://thyun85.dothome.co.kr/dailyboard/"+datas[3];
                         date = datas[4];
+                        like = datas[5];
+                        favorite = datas[6];
+                        likeCnt = Integer.parseInt(datas[7]);
 
-                        reviewItems.add(0, new ReviewItem(no, name, msg, imgPath, date));
+                        boolean favoriteNo = false;
+                        boolean likeNo = false;
+                        if(like.equals(num)) likeNo = true;
+                        if(favorite.equals(num)) favoriteNo = true;
+
+                        Log.i("favoriteNo", favoriteNo+"");
+                        Log.i("likeNo", likeNo+"");
+
+                        reviewItems.add(0, new ReviewItem(no, name, msg, imgPath, date, likeNo, favoriteNo, likeCnt));
 
                         adapterReview.notifyDataSetChanged();
                         refreshLayout.setRefreshing(false);
+
                         Log.i("aaa", "a3");
                         Log.i("aaa1", email);
-                    }else if(datas.length == 6){
-                        no = Integer.parseInt(datas[0]);
-                        name = datas[1];
-                        msg = datas[2];
-                        imgPath = "http://thyun85.dothome.co.kr/dailyboard/"+datas[3];
-                        date = datas[4];
-                        reviewNo = datas[5];
-
-                        reviewItems.add(0, new ReviewItem(no, name, msg, imgPath, date, true));
-
-                        adapterReview.notifyDataSetChanged();
-                        refreshLayout.setRefreshing(false);
-                        Log.i("aaa", "a4");
-                        Log.i("aaa2", email);
                     }
                 }
 

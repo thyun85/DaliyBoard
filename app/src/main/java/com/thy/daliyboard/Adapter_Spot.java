@@ -1,7 +1,9 @@
 package com.thy.daliyboard;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
@@ -35,6 +37,7 @@ public class Adapter_Spot extends RecyclerView.Adapter {
     boolean isEditable;
 
     String id, msg, email;
+    int no;
 
     public Adapter_Spot(Context context, ArrayList<SpotItem> spotItems) {
         this.context = context;
@@ -66,6 +69,7 @@ public class Adapter_Spot extends RecyclerView.Adapter {
         vh.tvTimes.setText(spotItem.upDate);
         vh.spotFavorite.setChecked(spotItem.isFavorite);
         vh.spotLike.setChecked(spotItem.isLike);
+        vh.tvLikeCount.setText(spotItem.likeCnt + "");
 
         Glide.with(context).load(spotItem.getImgPath()).into(vh.imageView);
 
@@ -80,9 +84,11 @@ public class Adapter_Spot extends RecyclerView.Adapter {
     class VH extends RecyclerView.ViewHolder{
 
         CircleImageView ivIcon;
-        TextView tvTitle, tvMessage, tvTimes;
-        ImageView imageView;
+        TextView tvTitle, tvMessage, tvTimes, tvLikeCount;
+        ImageView imageView, reply;
         ToggleButton spotFavorite, spotLike;
+
+        int cnt;
 
         public VH(View itemView) {
             super(itemView);
@@ -92,41 +98,76 @@ public class Adapter_Spot extends RecyclerView.Adapter {
             tvMessage = itemView.findViewById(R.id.tv_message);
             tvTimes = itemView.findViewById(R.id.tv_times);
             imageView = itemView.findViewById(R.id.iv_image);
+            tvLikeCount = itemView.findViewById(R.id.likecount);
 
             spotFavorite = itemView.findViewById(R.id.tb_spot_favorite);
-            spotFavorite.setOnCheckedChangeListener(checkedChangeListener);
+            spotFavorite.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                    switch (compoundButton.getId()){
+                        case R.id.tb_spot_favorite:
+                            if(isEditable){
+                                spotItems.get(getLayoutPosition()).isFavorite = checked;
+                                SharedPreferences pref = context.getSharedPreferences("facebookLoginData", context.MODE_PRIVATE);
+                                email = pref.getString("Email", "no email");
+                                no = spotItems.get(getLayoutPosition()).getNo();
+                                Log.i("favorite checked", checked+"");
+                                if(checked) uploadFavoriteDB();
+                                else deleteFavoriteDB();
+                            }
+                            break;
+                    }
+                }
+            });
 
             spotLike = itemView.findViewById(R.id.tb_spot_like);
-            spotLike.setOnCheckedChangeListener(checkedChangeListener);
+            spotLike.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                    switch (compoundButton.getId()){
+                        case R.id.tb_spot_like:
+                            if(isEditable){
+                                Log.v("test-111", getLayoutPosition() + "");
+                                spotItems.get(getLayoutPosition()).isLike = checked;
+                                SharedPreferences pref = context.getSharedPreferences("facebookLoginData", context.MODE_PRIVATE);
+                                email = pref.getString("Email", "no email");
+                                no = spotItems.get(getLayoutPosition()).getNo();
+                                Log.i("like checked", checked+"");
+                                if(checked) uploadLikeDB();
+                                else deleteLikeDB();
+
+                                SpotItem item = spotItems.get(getLayoutPosition());
+                                int likeCount = spotItems.get(getLayoutPosition()).likeCnt;
+                                if (item.isLike) {
+                                    item.likeCnt = ++likeCount;
+                                }
+                                else {
+                                    item.likeCnt = --likeCount;
+                                }
+                                tvLikeCount.setText(likeCount + "");
+
+                            }
+                            break;
+                    }
+                }
+            });
+            reply = itemView.findViewById(R.id.spot_reply);
+            reply.setOnClickListener(clickReply);
         }
 
-        CompoundButton.OnCheckedChangeListener checkedChangeListener = new CompoundButton.OnCheckedChangeListener() {
+        View.OnClickListener clickReply = new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
-                switch (compoundButton.getId()){
-                    case R.id.tb_spot_favorite:
-                        if(isEditable){
-                            spotItems.get(getLayoutPosition()).isFavorite = checked;
-                            SharedPreferences pref = context.getSharedPreferences("facebookLoginData", context.MODE_PRIVATE);
-                            email = pref.getString("Email", "no email");
-                            msg = spotItems.get(getLayoutPosition()).getMsg();
-                            Log.i("checked", checked+"");
-                            if(checked) uploadFavoriteDB();
-                            else deleteFavoriteDB();
-                        }
-                        break;
-                    case R.id.tb_spot_like:
-                        if(isEditable){
-                            spotItems.get(getLayoutPosition()).isLike = checked;
-                            SharedPreferences pref = context.getSharedPreferences("facebookLoginData", context.MODE_PRIVATE);
-                            email = pref.getString("Email", "no email");
-                            msg = spotItems.get(getLayoutPosition()).getMsg();
-                            Log.i("checked", checked+"");
-                            if(checked) uploadLikeDB();
-                            else deleteLikeDB();
-                        }
-                        break;
-                }
+            public void onClick(View view) {
+                String itemNo = spotItems.get(getLayoutPosition()).getNo()+"";
+                String itemMsg = spotItems.get(getLayoutPosition()).getMsg();
+                String itemDate = spotItems.get(getLayoutPosition()).getUpDate();
+                Intent intent = new Intent(context, ReplyActivity.class);
+                intent.putExtra("itemNo", itemNo);
+                intent.putExtra("itemMsg", itemMsg);
+                intent.putExtra("itemDate", itemDate);
+                intent.putExtra("type", "spot");
+                Log.i("no", itemNo+"");
+                context.startActivity(intent);
             }
         };
 
@@ -148,7 +189,7 @@ public class Adapter_Spot extends RecyclerView.Adapter {
 
             //요청객체에 데이터 추가하기
             multiPartRequest.addStringParam("email", email);
-            multiPartRequest.addStringParam("msg", msg);
+            multiPartRequest.addStringParam("no", no + "");
 
             //요청큐 객체 생성하기
             RequestQueue requestQueue = Volley.newRequestQueue(context);
@@ -175,7 +216,8 @@ public class Adapter_Spot extends RecyclerView.Adapter {
 
             //요청객체에 데이터 추가하기
             multiPartRequest.addStringParam("email", email);
-            multiPartRequest.addStringParam("msg", msg);
+//            multiPartRequest.addStringParam("msg", msg);
+            multiPartRequest.addStringParam("no", no + "");
 
             //요청큐 객체 생성하기
             RequestQueue requestQueue = Volley.newRequestQueue(context);
@@ -202,7 +244,8 @@ public class Adapter_Spot extends RecyclerView.Adapter {
 
             //요청객체에 데이터 추가하기
             multiPartRequest.addStringParam("email", email);
-            multiPartRequest.addStringParam("msg", msg);
+//            multiPartRequest.addStringParam("msg", msg);
+            multiPartRequest.addStringParam("no", no + "");
 
             //요청큐 객체 생성하기
             RequestQueue requestQueue = Volley.newRequestQueue(context);
@@ -229,7 +272,8 @@ public class Adapter_Spot extends RecyclerView.Adapter {
 
             //요청객체에 데이터 추가하기
             multiPartRequest.addStringParam("email", email);
-            multiPartRequest.addStringParam("msg", msg);
+//            multiPartRequest.addStringParam("msg", msg);
+            multiPartRequest.addStringParam("no", no + "");
 
             //요청큐 객체 생성하기
             RequestQueue requestQueue = Volley.newRequestQueue(context);
