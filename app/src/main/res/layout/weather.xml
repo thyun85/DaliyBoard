@@ -26,8 +26,15 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginTop="20dp"
-                    android:src="@drawable/sunny" />
+                    android:layout_marginTop="20dp"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"
+                    android:text="날씨 정보 제공 예정"
+                    android:textSize="24sp"
+                    android:gravity="center"
+                    android:layout_gravity="center"/>
 
                 <View
                     android:layout_width="match_parent"

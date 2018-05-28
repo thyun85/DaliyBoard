@@ -60,13 +60,17 @@ public class Fragment_Spot extends Fragment {
 
     String[] datas;
 
-    ImageView reply;
+    SharedPreferences pref;
+
+    TextView noticeSpot;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.spot, container, false);
+
+        noticeSpot = view.findViewById(R.id.notice_spot);
 
         recyclerViewSpot = view.findViewById(R.id.recycler_spot);
         adapterSpot = new Adapter_Spot(getActivity(), spotItems);
@@ -90,20 +94,41 @@ public class Fragment_Spot extends Fragment {
         });
 
         actionButton = view.findViewById(R.id.fab_spot);
-        actionButton.attachToRecyclerView(recyclerViewSpot);
-        actionButton.setOnClickListener(new View.OnClickListener() {
 
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), PostSpotActivity.class);
-                startActivity(intent);
-            }
+        pref = getActivity().getSharedPreferences("facebookLoginData", getActivity().MODE_PRIVATE);
+        String id = pref.getString("Id", "");
 
-        });
+        if(id.equals("")){
+            actionButton.setVisibility(View.GONE);
+        }else{
+//            actionButton.setVisibility(View.VISIBLE);
+//            actionButton.attachToRecyclerView(recyclerViewSpot);
+            actionButton.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(getActivity(), PostTipsActivity.class);
+                    startActivity(intent);
+                }
+
+            });
+        }
+
+//        actionButton = view.findViewById(R.id.fab_spot);
+//        actionButton.attachToRecyclerView(recyclerViewSpot);
+//        actionButton.setOnClickListener(new View.OnClickListener() {
+//
+//            @Override
+//            public void onClick(View view) {
+//                Intent intent = new Intent(getActivity(), PostSpotActivity.class);
+//                startActivity(intent);
+//            }
+//
+//        });
 
         adapterSpot.notifyDataSetChanged();
 
-        SharedPreferences pref = getActivity().getSharedPreferences("facebookLoginData", getActivity().MODE_PRIVATE);
+        pref = getActivity().getSharedPreferences("facebookLoginData", getActivity().MODE_PRIVATE);
         email = pref.getString("Email", "no email");
 
         return view;
@@ -118,11 +143,13 @@ public class Fragment_Spot extends Fragment {
             public void onResponse(String response) {
                 Log.i("aaa", "a1");
                 //insertDB.php의 echo 결과 보여주기
-                new AlertDialog.Builder(getActivity()).setMessage(response).setPositiveButton("ok", null).create().show();
+//                new AlertDialog.Builder(getActivity()).setMessage(response).setPositiveButton("ok", null).create().show();
 
                 if(response.equals("")){
-                    new AlertDialog.Builder(getActivity()).setMessage("내용없음").setPositiveButton("ok", null).create().show();
+//                    new AlertDialog.Builder(getActivity()).setMessage("내용없음").setPositiveButton("ok", null).create().show();
+                    noticeSpot.setVisibility(View.VISIBLE);
                 }else{
+                    noticeSpot.setVisibility(View.GONE);
                     //읽어온 데이터 문자열에서 db의 row(레코드)별로 배열로 분리하기
                     String[] rows = response.split(";");
 

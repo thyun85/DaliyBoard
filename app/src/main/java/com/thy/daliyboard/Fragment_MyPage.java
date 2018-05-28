@@ -2,6 +2,7 @@ package com.thy.daliyboard;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -49,9 +50,9 @@ public class Fragment_MyPage extends Fragment {
             public void onClick(View view) {
                 SharedPreferences pref = getActivity().getSharedPreferences("facebookLoginData", getActivity().MODE_PRIVATE);
 
-                String id = pref.getString("Id", "no");
-                String name = pref.getString("Name", "no name");
-                String email = pref.getString("Email", "no email");
+                String id = pref.getString("Id", "");
+                String name = pref.getString("Name", "");
+                String email = pref.getString("Email", "");
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 builder.setTitle("다이얼로그");
@@ -65,5 +66,4 @@ public class Fragment_MyPage extends Fragment {
 
         return view;
     }
-
 }

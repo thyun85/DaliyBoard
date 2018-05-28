@@ -4,6 +4,14 @@
     android:layout_height="match_parent"
     android:id="@+id/tabetc">
 
+    <TextView
+        android:id="@+id/notice_etc"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="게시글이 없습니다."
+        android:textSize="24sp"
+        android:gravity="center"/>
+
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/layout_swipe"
         android:layout_width="match_parent"

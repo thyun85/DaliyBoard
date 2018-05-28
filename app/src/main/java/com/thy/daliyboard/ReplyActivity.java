@@ -166,6 +166,7 @@ public class ReplyActivity extends AppCompatActivity {
                 public void onResponse(String response) {
                     //insertpostDB.php의 echo 결과 보여주기
                     new AlertDialog.Builder(ReplyActivity.this).setMessage(response).setPositiveButton("OK", null).create().show();
+                    adapterReply.notifyDataSetChanged();
                 }
             }, new Response.ErrorListener() {
                 @Override

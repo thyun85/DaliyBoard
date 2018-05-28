@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.VideoView;
 
 import com.android.volley.Request;
@@ -52,11 +53,15 @@ public class Fragment_Tips extends Fragment {
 
     String[] datas;
 
+    TextView noticeTips;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.tips, container, false);
+
+        noticeTips = view.findViewById(R.id.notice_tips);
 
         recyclerViewTip = view.findViewById(R.id.recycler_tips);
         adapterTips = new Adapter_Tips(getActivity(), tipsItems);
@@ -79,34 +84,37 @@ public class Fragment_Tips extends Fragment {
             }
         });
 
-        pref = getActivity().getSharedPreferences("facebookLoginData", getActivity().MODE_PRIVATE);
-        String id = pref.getString("Id", "no Id");
-
-//        if(!(id.equals("no"))){
-//            actionButton = view.findViewById(R.id.fab);
-//            actionButton.attachToRecyclerView(recyclerViewTip);
-//            actionButton.setOnClickListener(new View.OnClickListener() {
-//
-//                @Override
-//                public void onClick(View view) {
-//                    Intent intent = new Intent(getActivity(), PostTipsActivity.class);
-//                    startActivity(intent);
-//                }
-//
-//            });
-//        }
-
         actionButton = view.findViewById(R.id.fab);
-        actionButton.attachToRecyclerView(recyclerViewTip);
-        actionButton.setOnClickListener(new View.OnClickListener() {
 
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), PostTipsActivity.class);
-                startActivity(intent);
-            }
+        pref = getActivity().getSharedPreferences("facebookLoginData", getActivity().MODE_PRIVATE);
+        String id = pref.getString("Id", "");
 
-        });
+        if(id.equals("")){
+            actionButton.setVisibility(View.GONE);
+        }else{
+            actionButton.setVisibility(View.VISIBLE);
+            actionButton.attachToRecyclerView(recyclerViewTip);
+            actionButton.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(getActivity(), PostTipsActivity.class);
+                    startActivity(intent);
+                }
+
+            });
+        }
+
+//        actionButton.attachToRecyclerView(recyclerViewTip);
+//        actionButton.setOnClickListener(new View.OnClickListener() {
+//
+//            @Override
+//            public void onClick(View view) {
+//                Intent intent = new Intent(getActivity(), PostTipsActivity.class);
+//                startActivity(intent);
+//            }
+//
+//        });
 
         adapterTips.notifyDataSetChanged();
 
@@ -127,11 +135,13 @@ public class Fragment_Tips extends Fragment {
             public void onResponse(String response) {
                 Log.i("aaa", "a1");
                 //insertDB.php의 echo 결과 보여주기
-                new AlertDialog.Builder(getActivity()).setMessage(response).setPositiveButton("ok", null).create().show();
+//                new AlertDialog.Builder(getActivity()).setMessage(response).setPositiveButton("ok", null).create().show();
 
                 if(response.equals("")){
-                    new AlertDialog.Builder(getActivity()).setMessage("내용없음").setPositiveButton("ok", null).create().show();
+//                    new AlertDialog.Builder(getActivity()).setMessage("내용없음").setPositiveButton("ok", null).create().show();
+                    noticeTips.setVisibility(View.VISIBLE);
                 }else{
+                    noticeTips.setVisibility(View.GONE);
                     //읽어온 데이터 문자열에서 db의 row(레코드)별로 배열로 분리하기
                     String[] rows = response.split(";");
 

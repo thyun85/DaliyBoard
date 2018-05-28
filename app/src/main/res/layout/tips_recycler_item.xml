@@ -21,7 +21,8 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:src="@drawable/ch_chopa"
-            android:layout_alignParentLeft="true"/>
+            android:layout_alignParentLeft="true"
+            android:visibility="gone"/>
 
         <TextView
             android:id="@+id/tv_title"
@@ -50,9 +51,9 @@
             android:id="@+id/videoview"
             android:layout_width="match_parent"
             android:layout_height="250dp"
-            android:layout_below="@id/iv_icon"
+            android:layout_below="@id/tv_title"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="12dp"
             android:layout_marginBottom="10dp"/>
 
         <ToggleButton

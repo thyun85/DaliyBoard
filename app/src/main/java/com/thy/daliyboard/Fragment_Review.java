@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TabHost;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
@@ -66,11 +67,19 @@ public class Fragment_Review extends Fragment {
 
     String[] datas;
 
+    SharedPreferences pref;
+
+    TextView noticeLb, noticeSk8, noticeEtc;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         final View view = inflater.inflate(R.layout.review, container, false);
+
+        noticeLb = view.findViewById(R.id.notice_lb);
+        noticeSk8 = view.findViewById(R.id.notice_sk8);
+        noticeEtc = view.findViewById(R.id.notice_etc);
 
         tabHost = view.findViewById(android.R.id.tabhost);
         tabHost.setup();
@@ -83,7 +92,7 @@ public class Fragment_Review extends Fragment {
             @Override
             public void onTabChanged(String s) {
                 tag = s;
-                Toast.makeText(getActivity(), s, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getActivity(), s, Toast.LENGTH_SHORT).show();
 
                 if(tag.equals("Lb")) {
                     status = "Longboard";
@@ -187,9 +196,21 @@ public class Fragment_Review extends Fragment {
         }
 
         actionButton = view.findViewById(R.id.fab_review);
-        actionButton.setOnClickListener(clickFab);
 
-        SharedPreferences pref = getActivity().getSharedPreferences("facebookLoginData", getActivity().MODE_PRIVATE);
+        pref = getActivity().getSharedPreferences("facebookLoginData", getActivity().MODE_PRIVATE);
+        String id = pref.getString("Id", "");
+
+        if(id.equals("")){
+            actionButton.setVisibility(View.GONE);
+        }else{
+            actionButton.setVisibility(View.VISIBLE);
+            actionButton.attachToRecyclerView(recyclerViewReview);
+            actionButton.setOnClickListener(clickFab);
+        }
+//        actionButton = view.findViewById(R.id.fab_review);
+//        actionButton.setOnClickListener(clickFab);
+
+        pref = getActivity().getSharedPreferences("facebookLoginData", getActivity().MODE_PRIVATE);
         email = pref.getString("Email", "no email");
 
         return view;
@@ -212,11 +233,21 @@ public class Fragment_Review extends Fragment {
             public void onResponse(String response) {
                 Log.i("aaa", "a1");
                 //insertDB.php의 echo 결과 보여주기
-                new AlertDialog.Builder(getActivity()).setMessage(response).setPositiveButton("ok", null).create().show();
+//                new AlertDialog.Builder(getActivity()).setMessage(response).setPositiveButton("ok", null).create().show();
 
                 if(response.equals("")){
-                    new android.app.AlertDialog.Builder(getActivity()).setMessage("내용없음").setPositiveButton("ok", null).create().show();
+//                    new android.app.AlertDialog.Builder(getActivity()).setMessage("내용없음").setPositiveButton("ok", null).create().show();
+                    if(tag.equals("Lb")){
+                        noticeLb.setVisibility(View.VISIBLE);
+                    }else if(tag.equals("Sk8")){
+                        noticeSk8.setVisibility(View.VISIBLE);
+                    }else if(tag.equals("Etc")){
+                        noticeEtc.setVisibility(View.VISIBLE);
+                    }
                 }else{
+                    noticeLb.setVisibility(View.GONE);
+                    noticeSk8.setVisibility(View.GONE);
+                    noticeEtc.setVisibility(View.GONE);
                     //읽어온 데이터 문자열에서 db의 row(레코드)별로 배열로 분리하기
                     String[] rows = response.split(";");
 

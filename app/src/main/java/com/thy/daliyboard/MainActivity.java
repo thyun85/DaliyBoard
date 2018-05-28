@@ -13,6 +13,11 @@ import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
+
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -24,10 +29,33 @@ public class MainActivity extends AppCompatActivity {
     ViewPager pager;
     Adapter_Main adapter;
 
+    InterstitialAd interstitialAd;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        interstitialAd = new InterstitialAd(this);
+        interstitialAd.setAdUnitId("ca-app-pub-5581279304797415/7649181152");
+
+        AdRequest adRequest = new AdRequest.Builder().build();
+        interstitialAd.loadAd(adRequest);
+
+//        //광고가 로딩되는 상황을 듣는 리스너
+//        interstitialAd.setAdListener(new AdListener(){
+//            @Override
+//            public void onAdFailedToLoad(int i) {
+//                super.onAdFailedToLoad(i);
+//                interstitialAd.show();
+//            }
+//
+//            @Override
+//            public void onAdLoaded() {
+//                super.onAdLoaded();
+//                interstitialAd.show();
+//            }
+//        });
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -60,6 +88,20 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+        //광고가 로딩되는 상황을 듣는 리스너
+        interstitialAd.setAdListener(new AdListener(){
+            @Override
+            public void onAdFailedToLoad(int i) {
+                super.onAdFailedToLoad(i);
+                interstitialAd.show();
+            }
+
+            @Override
+            public void onAdLoaded() {
+                super.onAdLoaded();
+                interstitialAd.show();
+            }
+        });
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("종료 할까요?").setCancelable(false)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {

@@ -50,9 +50,9 @@ public class LoginActivity extends AppCompatActivity {
     private Button CustomloginButton;
     LoginButton loginButton;
 
-    String userId ="n";
-    String userName = "n";
-    String userEmail ="n";
+    String userId = "";
+    String userName = "";
+    String userEmail = "";
 
     ProgressDialog dialog;
 

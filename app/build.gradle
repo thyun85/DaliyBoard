@@ -39,4 +39,5 @@ dependencies {
     implementation 'com.facebook.android:facebook-android-sdk:[4,5)'
 
     compile 'dev.dworks.libs:volleyplus:+'
+    compile 'com.google.firebase:firebase-ads:11.8.0'
 }
